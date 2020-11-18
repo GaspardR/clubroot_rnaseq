@@ -1,0 +1,16 @@
+{
+  "__default__":
+  {
+    "job-name": "SM.{rule}",
+    "cpus-per-task": "1",
+    "mem-per-cpu": "4000M",
+    "time": "0-00:15:00",
+    "mail-user": "gaspard.reulet@usherbrooke.ca",
+    "mail-type": "FAIL"
+  },
+  "fasterq_dump":
+  {
+    "cpus-per-task": "16",
+    "time": "0-02:00:00"
+  }
+}
