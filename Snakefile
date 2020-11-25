@@ -11,16 +11,20 @@ wildcard_constraints:
 
 
 include: "rules/downloads.smk"
+include: "rules/DESeq2.smk"
 
 __author__ = ["Gaspard Reulet", "Hoang-Dong Nguyen"]
 
 
 rule all:
 	input:
-		fq = expand(
-			os.path.join(config["path"]["raw"], "{var}.{treat}.{dai}.{N}_1.fastq"),
-			var = config["cultivars"],
-			treat = config["treatment"],
-			dai = config["dai"],
-			N = config["replicates"]
-		)
+		DESeq2_dds_directory = "data/DESeq2/dds",
+
+
+		# fq = expand(
+		# 	os.path.join(config["path"]["raw"], "{var}.{treat}.{dai}.{N}_1.fastq"),
+		# 	var = config["cultivars"],
+		# 	treat = config["treatment"],
+		# 	dai = config["dai"],
+		# 	N = config["replicates"]
+		# )
