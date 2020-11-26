@@ -25,3 +25,34 @@ rule fasterq_dump:
 		"../envs/sra-tools.yaml"
 	shell:
 		"fasterq_dump --threads {params.cores} --dir {params.dir} {input}"
+
+
+rule download_genome:
+    """ Download genome """
+    output:
+        config["path"]["genome"]
+    shell:
+        "wget --quiet -O {output}.gz {config[download][genome]}"
+        " && gunzip {output}.gz"
+
+
+rule download_annotation:
+	output:
+		config["path"]["gtf"]
+	shell:
+		"wget --quiet -O {output}.gz {config[download][genome]}"
+        " && gunzip {output}.gz"
+
+
+rule download_coco:
+    output:
+        config["path"]["coco"]
+    params:
+        dir = Path(config["path"]["coco"]).parent.parent.parent
+    conda:
+        "../envs/git.yaml"
+    shell:
+        "mkdir -p {params.dir}"
+        " && cd {params.dir}"
+        " && rm -rf coco/"
+        " && git clone {config[download][coco]}"
