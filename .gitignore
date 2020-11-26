@@ -130,3 +130,7 @@ dmypy.json
 
 # Snakemake specifics
 .snakemake/
+
+# Slurm specifics
+slurm-*
+Log*
