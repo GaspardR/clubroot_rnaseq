@@ -40,7 +40,7 @@ rule download_annotation:
 	output:
 		config["path"]["gtf"]
 	shell:
-		"wget --quiet -O {output}.gz {config[download][genome]}"
+		"wget --quiet -O {output}.gz {config[download][gtf]}"
         " && gunzip {output}.gz"
 
 
