@@ -210,4 +210,4 @@ rule combine_gene_quantification:
     conda:
         '../envs/pypackages.yaml'
     script:
-        '../python_scripts/combine_gene_quantification.py'
+        '../modules/python_scripts/combine_gene_quantification.py'
