@@ -19,12 +19,11 @@ rule fasterq_dump:
 	output:
 		Path(config["path"]["raw"], "{var}.{treat}.{dai}.{N}_1.fastq")
 	params:
-		dir = config["path"]["raw"],
 		cores = config["params"]["fasterq_dump"]["cores"]
 	conda:
 		"../envs/sra-tools.yaml"
 	shell:
-		"fasterq-dump --threads {params.cores} --dir {params.dir} {input}"
+		"fasterq-dump --threads {params.cores} --outfile {output} {input}"
 
 
 rule download_genome:
