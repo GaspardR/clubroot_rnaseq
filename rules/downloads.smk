@@ -24,7 +24,7 @@ rule fasterq_dump:
 	conda:
 		"../envs/sra-tools.yaml"
 	shell:
-		"fasterq_dump --threads {params.cores} --dir {params.dir} {input}"
+		"fasterq-dump --threads {params.cores} --dir {params.dir} {input}"
 
 
 rule download_genome:
