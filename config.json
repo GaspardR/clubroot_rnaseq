@@ -3,9 +3,27 @@
 	"treatment": ["C", "I"],
 	"dai": ["7", "14", "21"],
 	"replicates": ["1", "2", "3"],
+	"strands": ["fwd", "rev"],
+	"paths": ["raw", "trimmed"],
+	"formats": ["html", "zip"],
 	"path":
 	{
-		"raw": "data/datasets/raw"
+		"adapters": "data/references/adapters.fa",
+		"gtf": "data/references/annotation.gtf",
+		"genome": "data/references/genome.fa",
+		"raw": "data/datasets/raw",
+		"trimmed": "data/datasets/trimmed",
+		"qc": "data/datasets/fastqc",
+		"STAR_ref": "data/datasets/STAR_genome",
+		"STAR_align": "data/datasets/STAR_aligned",
+		"STAR_sumup": "data/datasets/STAR_sumup",
+		"coco": "other_git_repos/coco/bin/coco.py",
+		"coco_ca": "data/references/gtf/corrected.gtf",
+		"coco_cc": "data/datasets/coco_cc",
+		"design": "design.tsv",
+		"combined": "data/datasets/combined/all.csv",
+		"strand": "data/datasets/strand",
+		"bedgraph": "data/datasets/bedgraph"
 	},
 	"download":
 	{
@@ -47,13 +65,22 @@
 			"LA.I.21.1": "https://sra-download.ncbi.nlm.nih.gov/traces/sra66/SRR/010618/SRR10873077",
 			"LA.I.21.2": "https://sra-download.ncbi.nlm.nih.gov/traces/sra12/SRR/010618/SRR10873076",
 			"LA.I.21.3": "https://sra-download.ncbi.nlm.nih.gov/traces/sra68/SRR/010618/SRR10873075"
-		}
+		},
+		"gtf": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/gtf/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.48.gtf.gz",
+		"genome": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/fasta/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/dna/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.dna.toplevel.fa.gz",
+		"coco": "http://gitlabscottgroup.med.usherbrooke.ca/scott-group/coco.git"
 	},
 	"params":
 	{
 		"fasterq_dump":
 		{
 			"cores": 16
+		},
+		"separate_strands":
+		{
+			"fwd": ["-b", "-F", "16"],
+			"rev": ["-b", "-f", "16"],
+			"cores": 15
 		}
 	}
 }
