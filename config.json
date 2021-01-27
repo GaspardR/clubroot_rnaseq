@@ -11,6 +11,7 @@
 		"adapters": "data/references/adapters.fa",
 		"gtf": "data/references/annotation.gtf",
 		"genome": "data/references/genome.fa",
+		"transcriptome": "data/references/transcriptome.fa",
 		"raw": "data/datasets/raw",
 		"trimmed": "data/datasets/trimmed",
 		"qc": "data/datasets/fastqc",
@@ -25,7 +26,8 @@
 		"DESeq2_dds": "data/DESeq2/dds",
 		"DESeq2_results": "data/DESeq2/results",
 		"strand": "data/datasets/strand",
-		"bedgraph": "data/datasets/bedgraph"
+		"bedgraph": "data/datasets/bedgraph",
+		"kallisto_idx": "data/datasets/kallisto.idx"
 	},
 	"download":
 	{

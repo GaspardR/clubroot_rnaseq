@@ -23,27 +23,29 @@ __author__ = ["Gaspard Reulet", "Hoang-Dong Nguyen"]
 
 rule all:
 	input:
-		DESeq2_results_directory = config['path']['DESeq2_results'],
-		# bedgraph = expand(
-		# 	os.path.join(
-	    #         config["path"]["bedgraph"],
-	    #         "{var}.{treat}.{dai}.{N}.{strand}.bedgraph"
-	    #     ),
-		# 	var = config["cultivars"],
-		# 	treat = config["treatment"],
-		# 	dai = config["dai"],
-		# 	N = config["replicates"],
-		# 	strand = config["strands"]
-		# ),
-		# fastqc = expand(
-		# 	os.path.join(
-		# 		config["path"]["qc"],
-	    #         "{var}.{treat}.{dai}.{N}.{path}_fastqc.{format}"
-		# 	),
-		# 	var = config["cultivars"],
-		# 	treat = config["treatment"],
-		# 	dai = config["dai"],
-		# 	N = config["replicates"],
-		# 	path = config["paths"],
-		# 	format = config["formats"]
-		# )
+		fastqc = expand(
+			os.path.join(
+				config["path"]["qc"],
+	            "{var}.{treat}.{dai}.{N}.{path}_fastqc.{format}"
+			),
+			var = config["cultivars"],
+			treat = config["treatment"],
+			dai = config["dai"],
+			N = config["replicates"],
+			path = config["paths"],
+			format = config["formats"]
+		),
+
+		quant = expand(
+			"results/kallisto/{var}.{treat}.{dai}.{N}.tsv",
+			var = config["cultivars"],
+			treat = config["treatment"],
+			dai = config["dai"],
+			N = config["replicates"],
+			path = config["paths"],
+			format = config["formats"]
+		),
+
+		# DESeq2_results_directory = config['path']['DESeq2_results'],
+
+
