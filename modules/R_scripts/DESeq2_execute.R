@@ -21,10 +21,8 @@ break
 ##############################################################
 
 
-## load the raw count matrix
-dt_raw_count <- fread(
-    file = snakemake@input[['rawcount_matrix']]
-)
+## lload the DDS data
+readRDSloadRDS()
 
 
 ##############################################################

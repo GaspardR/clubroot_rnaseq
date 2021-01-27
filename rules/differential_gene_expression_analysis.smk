@@ -7,7 +7,8 @@
 
 rule DESeq2_init:
     input:
-        rawcount_matrix = rules.combine_gene_quantification.output.combined
+        # combined = rules.combine_gene_quantification.output.combined
+        combined = 'data/test.csv'
     output:
         DESeq2_dds_directory = config['path']['DESeq2_dds']
     params:
