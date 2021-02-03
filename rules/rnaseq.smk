@@ -69,17 +69,19 @@ rule fastqc:
         " {input.fq} {input.trim}"
         " &> log"
 
+
 rule create_transcriptome:
     """ Uses gffread to generate a transcriptome """
     input:
         genome = rules.merge_genome.output.merged_genome,
         gtf = rules.merge_annotation.output.merged_annotation
     output:
-        transcriptome = config['path']['transcriptome']
+        transcriptome = config["path"]["transcriptome"]
     conda:
         "../envs/gffread.yaml"
     shell:
         "gffread {input.gtf} -g {input.genome} -w {output.transcriptome}"
+
 
 rule kallisto_index:
     """ Generates the transcriptome index for Kallisto """
@@ -99,6 +101,7 @@ rule kallisto_index:
         "--kmer-size={params.kmer} "
         "{input.transcriptome} "
         "&> {log}"
+
 
 rule kallisto_quant:
     """ Generates counts using Kallisto pseudo-alignment """
@@ -127,11 +130,6 @@ rule kallisto_quant:
         "--single -l 200 -s 20 "
         "{input.fq} "
         "&> {log}"
-
-
-
-
-
 
 
 # rule combine_gene_quantification:
