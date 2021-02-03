@@ -119,7 +119,7 @@ rule kallisto_quant:
         )
     params:
         bootstrap = "50",
-        outdir = Path(
+        outdir = os.path.join(
             config["path"]["kallisto_quant"],
             "{var}.{treat}.{dai}.{N}"
         )
