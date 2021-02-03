@@ -121,51 +121,11 @@ rule fastqc:
 #         " &> {log}"
 
 
-# rule coco_ca:
-#     input:
-#         coco = rules.download_coco.output,
-#         gtf = rules.download_annotation.output
-#     output:
-#         ref = config["path"]["coco_ca"]
-#     conda:
-#         '../envs/coco.yaml'
-#     shell:
-#         'python {input.coco} ca'
-#         ' -b snoRNA,tRNA,snRNA,ncRNA'
-#         ' -o {output.ref}'
-#         ' {input.gtf}'
-
-
-# rule coco_cc:
-#     input:
-#         gtf = rules.coco_ca.output.ref,
-#         bam = rules.STAR_align.output.bam
-#     output:
-#         counts = Path(
-#             config["path"]["coco_cc"],
-#             '{var}.{treat}.{dai}.{N}.tsv'
-#         )
-#     params:
-#         coco_path = 'other_git_repos/coco/bin'
-#     threads:
-#         8
-#     conda:
-#         '../envs/coco.yaml'
-#     shell:
-#         'python {params.coco_path}/coco.py cc'
-#         ' --countType both'
-#         ' --thread {threads}'
-#         ' --strand 1'
-#         ' {input.gtf}'
-#         ' {input.bam}'
-#         ' {output.counts}'
-
-
 rule create_transcriptome:
     """ Uses gffread to generate a transcriptome """
     input:
-        genome = rules.download_genome.output,
-        gtf = rules.download_annotation.output
+        genome = rules.merge_genome.output.merged_genome,
+        gtf = rules.merge_annotation.output.merged_annotation
     output:
         transcriptome = config['path']['transcriptome']
     conda:
