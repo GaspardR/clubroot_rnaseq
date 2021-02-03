@@ -8,9 +8,14 @@
 	"path":
 	{
 		"adapters": "data/references/adapters.fa",
-		"gtf": "data/references/annotation.gtf",
-		"genome": "data/references/genome.fa",
+		"gtf_plasmodiophora_brassicae": "data/references/annotation_plasmodiophora_brassicae.gtf",
+		"gtf_plasmodiophora_brassicae_noheader": "data/references/annotation_plasmodiophora_brassicae_noheader.gtf",
+		"genome_plasmodiophora_brassicae": "data/references/genome_plasmodiophora_brassicae.fa",
+		"gtf_brassica_napus": "data/references/annotation_brassica_napus.gtf",
+		"genome_brassica_napus": "data/references/genome_brassica_napus.fa",
 		"transcriptome": "data/references/transcriptome.fa",
+		"merged_genome": "data/references/merged_genome.fa",
+		"merged_annotation": "data/references/merged_annotation.gtf",
 		"raw": "data/datasets/raw",
 		"trimmed": "data/datasets/trimmed",
 		"qc": "data/datasets/fastqc",
@@ -26,7 +31,7 @@
 		"DESeq2_results": "data/DESeq2/results",
 		"strand": "data/datasets/strand",
 		"bedgraph": "data/datasets/bedgraph",
-		"kallisto_idx": "data/datasets/kallisto.idx"
+		"kallisto_idx": "data/kallisto/kallisto.idx"
 	},
 	"download":
 	{
@@ -69,8 +74,10 @@
 			"LA.I.21.2": "https://sra-download.ncbi.nlm.nih.gov/traces/sra12/SRR/010618/SRR10873076",
 			"LA.I.21.3": "https://sra-download.ncbi.nlm.nih.gov/traces/sra68/SRR/010618/SRR10873075"
 		},
-		"gtf": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/gtf/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.48.gtf.gz",
-		"genome": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/fasta/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/dna/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.dna.toplevel.fa.gz",
+		"gtf_plasmodiophora_brassicae": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/gtf/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.48.gtf.gz",
+		"genome_plasmodiophora_brassicae": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/fasta/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/dna/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.dna.toplevel.fa.gz",
+		"gtf_brassica_napus": "ftp://ftp.ensemblgenomes.org/pub/plants/release-49/gtf/brassica_napus/Brassica_napus.AST_PRJEB5043_v1.49.gtf.gz",
+		"genome_brassica_napus": "ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/brassica_napus/dna/Brassica_napus.AST_PRJEB5043_v1.dna.toplevel.fa.gz",
 		"coco": "http://gitlabscottgroup.med.usherbrooke.ca/scott-group/coco.git"
 	},
 	"params":
@@ -84,6 +91,10 @@
 			"fwd": ["-b", "-F", "16"],
 			"rev": ["-b", "-f", "16"],
 			"cores": 15
+		},
+		"kallisto_quant":
+		{
+			"cores": 16
 		}
 	}
 }

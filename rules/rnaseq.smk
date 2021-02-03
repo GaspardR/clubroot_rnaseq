@@ -32,7 +32,6 @@ rule trimmomatic:
         " {params.trimmer}"
         " &> {log}"
 
-
 rule fastqc:
     input:
         fq = rules.fasterq_dump.output,
@@ -70,114 +69,11 @@ rule fastqc:
         " {input.fq} {input.trim}"
         " &> log"
 
-
-# rule STAR_index:
-#     input:
-#         genome = rules.download_genome.output,
-#         gtf = rules.download_annotation.output
-#     output:
-#         directory(config['path']['STAR_ref'])
-#     conda:
-#         "../envs/STAR.yaml"
-#     threads:
-#         16
-#     log:
-#         "logs/STAR_index.log"
-#     shell:
-#         "mkdir {output}"
-#         " && STAR"
-#         " --runMode genomeGenerate"
-#         " --runThreadN {threads}"
-#         " --genomeDir {output}"
-#         " --genomeFastaFiles {input.genome}"
-#         " --sjdbGTFfile {input.gtf}"
-#         " --sjdbOverhang 74"
-
-
-# rule STAR_align:
-#     input:
-#         r = rules.trimmomatic.output.r,
-#         index = Path(config['path']['STAR_ref'])
-#     output:
-#         bam = Path(
-#             config["path"]["STAR_align"],
-#             "{var}.{treat}.{dai}.{N}.Aligned.sortedByCoord.out.bam"
-#         )
-#     conda:
-#         "../envs/STAR.yaml"
-#     params:
-#         outFileNamePrefix = os.path.join(
-#             config["path"]["STAR_align"],
-#             "{var}.{treat}.{dai}.{N}."
-#         )
-#     threads:
-#         16
-#     log:
-#         "logs/STAR_align.{var}.{treat}.{dai}.{N}.log"
-#     shell:
-#         "STAR"
-#         " --runMode alignReads"
-#         " --genomeDir {input.index}"
-#         " --readFilesIn {input.r}"
-#         " --outFileNamePrefix {params.outFileNamePrefix}"
-#         " --runThreadN {threads}"
-#         " --readFilesCommand zcat"
-#         " --outReadsUnmapped Fastx"
-#         " --outStd Log"
-#         " --outSAMtype BAM SortedByCoordinate"
-#         " --outSAMunmapped None"
-#         " --outFilterType BySJout"
-#         " --outFilterMismatchNmax 5"
-#         " --alignIntronMax 2500"
-#         " --alignMatesGapMax 14750"
-#         " &> {log}"
-
-
-# rule coco_ca:
-#     input:
-#         coco = rules.download_coco.output,
-#         gtf = rules.download_annotation.output
-#     output:
-#         ref = config["path"]["coco_ca"]
-#     conda:
-#         '../envs/coco.yaml'
-#     shell:
-#         'python {input.coco} ca'
-#         ' -b snoRNA,tRNA,snRNA,ncRNA'
-#         ' -o {output.ref}'
-#         ' {input.gtf}'
-
-
-# rule coco_cc:
-#     input:
-#         gtf = rules.coco_ca.output.ref,
-#         bam = rules.STAR_align.output.bam
-#     output:
-#         counts = Path(
-#             config["path"]["coco_cc"],
-#             '{var}.{treat}.{dai}.{N}.tsv'
-#         )
-#     params:
-#         coco_path = 'other_git_repos/coco/bin'
-#     threads:
-#         8
-#     conda:
-#         '../envs/coco.yaml'
-#     shell:
-#         'python {params.coco_path}/coco.py cc'
-#         ' --countType both'
-#         ' --thread {threads}'
-#         ' --strand 1'
-#         ' {input.gtf}'
-#         ' {input.bam}'
-#         ' {output.counts}'
-
-
 rule create_transcriptome:
     """ Uses gffread to generate a transcriptome """
     input:
-        genome = rules.download_genome.output,
-        gtf = rules.download_annotation.output
+        genome = rules.merge_genome.output.merged_genome,
+        gtf = rules.merge_annotation.output.merged_annotation
     output:
         transcriptome = config['path']['transcriptome']
     conda:
@@ -210,15 +106,15 @@ rule kallisto_quant:
         kallisto_idx = rules.kallisto_index.output.kallisto_idx,
         fq = rules.trimmomatic.output.r
     output:
-        quant = "results/kallisto/{var}.{treat}.{dai}.{N}.tsv",
-        h5 = "results/kallisto/{var}.{treat}.{dai}.{N}.h5",
+        quant = "data/kallisto/{var}.{treat}.{dai}.{N}/abundance.tsv",
+        h5 = "data/kallisto/{var}.{treat}.{dai}.{N}/abundance.h5",
     params:
         bootstrap = "50",
-        outdir = "results/kallisto"
+        outdir = "data/kallisto/{var}.{treat}.{dai}.{N}/"
     log:
         "logs/kallisto/{var}.{treat}.{dai}.{N}.log"
     threads:
-        32
+        config["params"]["kallisto_quant"]["cores"]
     conda:
         "../envs/kallisto.yaml"
     shell:

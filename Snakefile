@@ -35,7 +35,7 @@ rule all:
 		fastqc = get_fastqc(config)
 
 		quant = expand(
-			"results/kallisto/{var}.{treat}.{dai}.{N}.tsv",
+			"data/kallisto/{var}.{treat}.{dai}.{N}/abundance.tsv",
 			var = config["cultivars"],
 			treat = config["treatment"],
 			dai = config["dai"],
