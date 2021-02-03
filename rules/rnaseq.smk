@@ -58,69 +58,6 @@ rule fastqc:
         " {input.fq}"
         " &> log"
 
-
-# rule STAR_index:
-#     input:
-#         genome = rules.download_genome.output,
-#         gtf = rules.download_annotation.output
-#     output:
-#         directory(config['path']['STAR_ref'])
-#     conda:
-#         "../envs/STAR.yaml"
-#     threads:
-#         16
-#     log:
-#         "logs/STAR_index.log"
-#     shell:
-#         "mkdir {output}"
-#         " && STAR"
-#         " --runMode genomeGenerate"
-#         " --runThreadN {threads}"
-#         " --genomeDir {output}"
-#         " --genomeFastaFiles {input.genome}"
-#         " --sjdbGTFfile {input.gtf}"
-#         " --sjdbOverhang 74"
-
-
-# rule STAR_align:
-#     input:
-#         r = rules.trimmomatic.output.r,
-#         index = Path(config['path']['STAR_ref'])
-#     output:
-#         bam = Path(
-#             config["path"]["STAR_align"],
-#             "{var}.{treat}.{dai}.{N}.Aligned.sortedByCoord.out.bam"
-#         )
-#     conda:
-#         "../envs/STAR.yaml"
-#     params:
-#         outFileNamePrefix = os.path.join(
-#             config["path"]["STAR_align"],
-#             "{var}.{treat}.{dai}.{N}."
-#         )
-#     threads:
-#         16
-#     log:
-#         "logs/STAR_align.{var}.{treat}.{dai}.{N}.log"
-#     shell:
-#         "STAR"
-#         " --runMode alignReads"
-#         " --genomeDir {input.index}"
-#         " --readFilesIn {input.r}"
-#         " --outFileNamePrefix {params.outFileNamePrefix}"
-#         " --runThreadN {threads}"
-#         " --readFilesCommand zcat"
-#         " --outReadsUnmapped Fastx"
-#         " --outStd Log"
-#         " --outSAMtype BAM SortedByCoordinate"
-#         " --outSAMunmapped None"
-#         " --outFilterType BySJout"
-#         " --outFilterMismatchNmax 5"
-#         " --alignIntronMax 2500"
-#         " --alignMatesGapMax 14750"
-#         " &> {log}"
-
-
 rule create_transcriptome:
     """ Uses gffread to generate a transcriptome """
     input:
@@ -158,15 +95,15 @@ rule kallisto_quant:
         kallisto_idx = rules.kallisto_index.output.kallisto_idx,
         fq = rules.trimmomatic.output.r
     output:
-        quant = "results/kallisto/{var}.{treat}.{dai}.{N}.tsv",
-        h5 = "results/kallisto/{var}.{treat}.{dai}.{N}.h5",
+        quant = "data/kallisto/{var}.{treat}.{dai}.{N}/abundance.tsv",
+        h5 = "data/kallisto/{var}.{treat}.{dai}.{N}/abundance.h5",
     params:
         bootstrap = "50",
-        outdir = "results/kallisto"
+        outdir = "data/kallisto/{var}.{treat}.{dai}.{N}/"
     log:
         "logs/kallisto/{var}.{treat}.{dai}.{N}.log"
     threads:
-        32
+        6
     conda:
         "../envs/kallisto.yaml"
     shell:

@@ -1,8 +1,8 @@
 {
-	"cultivars": ["BR", "LA"],
-	"treatment": ["C", "I"],
-	"dai": ["7", "14", "21"],
-	"replicates": ["1", "2", "3"],
+	"cultivars": ["LA"],
+	"treatment": ["C"],
+	"dai": ["14"],
+	"replicates": ["1"],
 	"strands": ["fwd", "rev"],
 	"paths": ["raw", "trimmed"],
 	"formats": ["html", "zip"],
@@ -10,12 +10,13 @@
 	{
 		"adapters": "data/references/adapters.fa",
 		"gtf_plasmodiophora_brassicae": "data/references/annotation_plasmodiophora_brassicae.gtf",
+		"gtf_plasmodiophora_brassicae_noheader": "data/references/annotation_plasmodiophora_brassicae_noheader.gtf",
 		"genome_plasmodiophora_brassicae": "data/references/genome_plasmodiophora_brassicae.fa",
 		"gtf_brassica_napus": "data/references/annotation_brassica_napus.gtf",
 		"genome_brassica_napus": "data/references/genome_brassica_napus.fa",
 		"transcriptome": "data/references/transcriptome.fa",
-		"merged_genome": "data/references/merged_genome",
-		"merged_annotation": "data/references/merged_annotation",
+		"merged_genome": "data/references/merged_genome.fa",
+		"merged_annotation": "data/references/merged_annotation.gtf",
 		"raw": "data/datasets/raw",
 		"trimmed": "data/datasets/trimmed",
 		"qc": "data/datasets/fastqc",
@@ -31,7 +32,7 @@
 		"DESeq2_results": "data/DESeq2/results",
 		"strand": "data/datasets/strand",
 		"bedgraph": "data/datasets/bedgraph",
-		"kallisto_idx": "data/datasets/kallisto.idx"
+		"kallisto_idx": "data/kallisto/kallisto.idx"
 	},
 	"download":
 	{
