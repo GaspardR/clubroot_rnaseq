@@ -71,119 +71,18 @@ rule fastqc:
         " &> log"
 
 
-# rule STAR_index:
-#     input:
-#         genome = rules.download_genome.output,
-#         gtf = rules.download_annotation.output
-#     output:
-#         directory(config['path']['STAR_ref'])
-#     conda:
-#         "../envs/STAR.yaml"
-#     threads:
-#         16
-#     log:
-#         "logs/STAR_index.log"
-#     shell:
-#         "mkdir {output}"
-#         " && STAR"
-#         " --runMode genomeGenerate"
-#         " --runThreadN {threads}"
-#         " --genomeDir {output}"
-#         " --genomeFastaFiles {input.genome}"
-#         " --sjdbGTFfile {input.gtf}"
-#         " --sjdbOverhang 74"
-
-
-# rule STAR_align:
-#     input:
-#         r = rules.trimmomatic.output.r,
-#         index = Path(config['path']['STAR_ref'])
-#     output:
-#         bam = Path(
-#             config["path"]["STAR_align"],
-#             "{var}.{treat}.{dai}.{N}.Aligned.sortedByCoord.out.bam"
-#         )
-#     conda:
-#         "../envs/STAR.yaml"
-#     params:
-#         outFileNamePrefix = os.path.join(
-#             config["path"]["STAR_align"],
-#             "{var}.{treat}.{dai}.{N}."
-#         )
-#     threads:
-#         16
-#     log:
-#         "logs/STAR_align.{var}.{treat}.{dai}.{N}.log"
-#     shell:
-#         "STAR"
-#         " --runMode alignReads"
-#         " --genomeDir {input.index}"
-#         " --readFilesIn {input.r}"
-#         " --outFileNamePrefix {params.outFileNamePrefix}"
-#         " --runThreadN {threads}"
-#         " --readFilesCommand zcat"
-#         " --outReadsUnmapped Fastx"
-#         " --outStd Log"
-#         " --outSAMtype BAM SortedByCoordinate"
-#         " --outSAMunmapped None"
-#         " --outFilterType BySJout"
-#         " --outFilterMismatchNmax 5"
-#         " --alignIntronMax 2500"
-#         " --alignMatesGapMax 14750"
-#         " &> {log}"
-
-
-# rule coco_ca:
-#     input:
-#         coco = rules.download_coco.output,
-#         gtf = rules.download_annotation.output
-#     output:
-#         ref = config["path"]["coco_ca"]
-#     conda:
-#         '../envs/coco.yaml'
-#     shell:
-#         'python {input.coco} ca'
-#         ' -b snoRNA,tRNA,snRNA,ncRNA'
-#         ' -o {output.ref}'
-#         ' {input.gtf}'
-
-
-# rule coco_cc:
-#     input:
-#         gtf = rules.coco_ca.output.ref,
-#         bam = rules.STAR_align.output.bam
-#     output:
-#         counts = Path(
-#             config["path"]["coco_cc"],
-#             '{var}.{treat}.{dai}.{N}.tsv'
-#         )
-#     params:
-#         coco_path = 'other_git_repos/coco/bin'
-#     threads:
-#         8
-#     conda:
-#         '../envs/coco.yaml'
-#     shell:
-#         'python {params.coco_path}/coco.py cc'
-#         ' --countType both'
-#         ' --thread {threads}'
-#         ' --strand 1'
-#         ' {input.gtf}'
-#         ' {input.bam}'
-#         ' {output.counts}'
-
-
 rule create_transcriptome:
     """ Uses gffread to generate a transcriptome """
     input:
         genome = rules.download_genome.output,
         gtf = rules.download_annotation.output
     output:
-        transcriptome = config['path']['transcriptome']
+        transcriptome = config["path"]["transcriptome"]
     conda:
         "../envs/gffread.yaml"
     shell:
         "gffread {input.gtf} -g {input.genome} -w {output.transcriptome}"
+
 
 rule kallisto_index:
     """ Generates the transcriptome index for Kallisto """
@@ -203,6 +102,7 @@ rule kallisto_index:
         "--kmer-size={params.kmer} "
         "{input.transcriptome} "
         "&> {log}"
+
 
 rule kallisto_quant:
     """ Generates counts using Kallisto pseudo-alignment """
@@ -231,11 +131,6 @@ rule kallisto_quant:
         "--single -l 200 -s 20 "
         "{input.fq} "
         "&> {log}"
-
-
-
-
-
 
 
 # rule combine_gene_quantification:

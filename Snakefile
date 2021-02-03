@@ -6,9 +6,8 @@ configfile: "config.json"
 wildcard_constraints:
 	var = "({})".format("|".join(config["var"])),
 	treat = "({})".format("|".join(config["treat"])),
-	day = "({})".format("|".join(config["dai"])),
+	dai = "({})".format("|".join(config["dai"])),
 	N = "({})".format("|".join(config["N"])),
-	strand = "({})".format("|".join(config["strand"])),
 	format = "({})".format("|".join(config["format"]))
 
 
@@ -32,16 +31,13 @@ def get_fastqc(config):
 
 rule all:
 	input:
-		fastqc = get_fastqc(config)
-
+		fastqc = get_fastqc(config),
 		quant = expand(
 			"results/kallisto/{var}.{treat}.{dai}.{N}.tsv",
-			var = config["cultivars"],
-			treat = config["treatment"],
+			var = config["var"],
+			treat = config["treat"],
 			dai = config["dai"],
-			N = config["replicates"],
-			path = config["paths"],
-			format = config["formats"]
+			N = config["N"],
 		),
 
 		# DESeq2_results_directory = config['path']['DESeq2_results'],
