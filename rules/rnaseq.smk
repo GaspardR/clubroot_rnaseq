@@ -29,7 +29,6 @@ rule trimmomatic:
         " {params.trimmer}"
         " &> {log}"
 
-
 rule fastqc:
     input:
         fq = Path("data/datasets/{path}", "{var}.{treat}.{dai}.{N}_1.fastq")
@@ -103,7 +102,7 @@ rule kallisto_quant:
     log:
         "logs/kallisto/{var}.{treat}.{dai}.{N}.log"
     threads:
-        6
+        config["params"]["kallisto_quant"]["cores"]
     conda:
         "../envs/kallisto.yaml"
     shell:

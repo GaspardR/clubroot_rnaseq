@@ -1,8 +1,8 @@
 {
-	"cultivars": ["LA"],
-	"treatment": ["C"],
-	"dai": ["14"],
-	"replicates": ["1"],
+	"cultivars": ["BR", "LA"],
+	"treatment": ["C", "I"],
+	"dai": ["7", "14", "21"],
+	"replicates": ["1", "2", "3"],
 	"strands": ["fwd", "rev"],
 	"paths": ["raw", "trimmed"],
 	"formats": ["html", "zip"],
@@ -92,6 +92,10 @@
 			"fwd": ["-b", "-F", "16"],
 			"rev": ["-b", "-f", "16"],
 			"cores": 15
+		},
+		"kallisto_quant":
+		{
+			"cores": 16
 		}
 	}
 }
