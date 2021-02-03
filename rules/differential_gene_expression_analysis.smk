@@ -1,7 +1,7 @@
 
 
 """
-        Differential gene expression analysis 
+        Differential gene expression analysis
 """
 
 
@@ -11,8 +11,6 @@ rule DESeq2_init:
         combined = 'data/test.csv'
     output:
         DESeq2_dds_directory = config['path']['DESeq2_dds']
-    params:
-        cores = config["params"]["separate_strands"]["cores"]
     conda:
         '../envs/DESeq2.yaml'
     script:
@@ -24,8 +22,6 @@ rule DESeq2_execute:
         DESeq2_dds_directory = rules.DESeq2_init.output.DESeq2_dds_directory
     output:
         DESeq2_results_directory = config['path']['DESeq2_results']
-    params:
-        cores = config["params"]["separate_strands"]["cores"]
     conda:
         '../envs/DESeq2.yaml'
     script:

@@ -5,7 +5,7 @@ rule download_sra:
 	output:
 		fq = Path(config["path"]["raw"], "{var}.{treat}.{dai}.{N}.1")
 	run:
-		key = '.'.join(
+		key = ".".join(
 			[wildcards.var, wildcards.treat, wildcards.dai, wildcards.N]
 		)
 		link = config["download"]["files"][key]
@@ -25,63 +25,64 @@ rule fasterq_dump:
 	shell:
 		"fasterq-dump --threads {params.cores} --outfile {output} {input}"
 
-"""
-	Download the genomes of each specie
-"""
+
+# Download the genomes of each species
 rule download_genome_brassica_napus:
-    output:
-        genome_brassica_napus = config["path"]["genome_brassica_napus"]
-    shell:
-        "wget --quiet -O {output.genome_brassica_napus}.gz {config[download][genome_brassica_napus]}"
-        " && gunzip {output.genome_brassica_napus}.gz"
+	output:
+		genome = config["path"]["genome_brassica_napus"]
+	params:
+		link = config["download"]["genome_brassica_napus"]
+	shell:
+		"wget --quiet -O {output.genome}.gz {params.link}"
+		" && gunzip {output.genome}.gz"
 
 rule download_genome_plasmodiophora_brassicae:
-    output:
-        genome_plasmodiophora_brassicae = config["path"]["genome_plasmodiophora_brassicae"]
-    shell:
-        "wget --quiet -O {output.genome_plasmodiophora_brassicae}.gz {config[download][genome_plasmodiophora_brassicae]}"
-        " && gunzip {output.genome_plasmodiophora_brassicae}.gz"
+	output:
+		genome = config["path"]["genome_plasmodiophora_brassicae"]
+	params:
+		link = config["download"]["genome_plasmodiophora_brassicae"]
+	shell:
+		"wget --quiet -O {output.genome}.gz {params.link}"
+		" && gunzip {output.genome}.gz"
 
-"""
-	Download the annotations of each specie
-"""
+
+# Download the annotations of each species
 rule download_annotation_brassica_napus:
 	output:
-		gtf_brassica_napus = config["path"]["gtf_brassica_napus"]
+		gtf = config["path"]["gtf_brassica_napus"]
+	params:
+		link = config["download"]["gtf_brassica_napus"]
 	shell:
-		"wget --quiet -O {output.gtf_brassica_napus}.gz {config[download][gtf_brassica_napus]}"
-        " && gunzip {output.gtf_brassica_napus}.gz"
+		"wget --quiet -O {output.gtf}.gz {params.link}"
+		" && gunzip {output.gtf}.gz"
 
 rule download_annotation_plasmodiophora_brassicae:
 	output:
-		gtf_plasmodiophora_brassicae = config["path"]["gtf_plasmodiophora_brassicae"],
-		gtf_plasmodiophora_brassicae_noheader = config['path']['gtf_plasmodiophora_brassicae_noheader']
+		gtf = config["path"]["gtf_plasmodiophora_brassicae"],
+	params:
+		link = config["download"]["gtf_plasmodiophora_brassicae"]
 	shell:
-		"wget --quiet -O {output.gtf_plasmodiophora_brassicae}.gz {config[download][gtf_plasmodiophora_brassicae]}"
-        " && gunzip {output.gtf_plasmodiophora_brassicae}.gz"
-		" && grep -v '#!' {output.gtf_plasmodiophora_brassicae} > {output.gtf_plasmodiophora_brassicae_noheader}"
+		"wget --quiet -O {output.gtf}.gz {params.link}"
+		" && zgrep -v '#!' {output.gtf}.gz > {output.gtf}"
 
 
-"""
-	Merge the annotation and the genome together
-"""
-
+# Merge annotations and genomes
 rule merge_annotation:
 	input:
-		annotation_brassica_napus = rules.download_annotation_brassica_napus.output.gtf_brassica_napus,
-		annotation_plasmodiophora_brassicae = rules.download_annotation_plasmodiophora_brassicae.output.gtf_plasmodiophora_brassicae_noheader
+		brassica_napus = rules.download_annotation_brassica_napus.output.gtf,
+		plasmodiophora_brassicae = rules.download_annotation_plasmodiophora_brassicae.output.gtf
 	output:
-		merged_annotation = config['path']['merged_annotation']
+		merged_annotation = config["path"]["merged_annotation"]
 	shell:
-		"cat {input.annotation_plasmodiophora_brassicae} {input.annotation_brassica_napus} > {output.merged_annotation}"
-
+		"cat {input.plasmodiophora_brassicae} {input.brassica_napus}"
+		" > {output.merged_annotation}"
 
 rule merge_genome:
 	input:
-		genome_plasmodiophora_brassicae = rules.download_genome_plasmodiophora_brassicae.output.genome_plasmodiophora_brassicae,
-		genome_brassica_napus = rules.download_genome_brassica_napus.output.genome_brassica_napus
+		plasmodiophora_brassicae = rules.download_genome_plasmodiophora_brassicae.output.genome,
+		brassica_napus = rules.download_genome_brassica_napus.output.genome
 	output:
-		merged_genome = config['path']['merged_genome']
+		merged_genome = config["path"]["merged_genome"]
 	shell:
-		"cat {input.genome_brassica_napus} {input.genome_plasmodiophora_brassicae} > {output.merged_genome}"
-
+		"cat {input.brassica_napus} {input.plasmodiophora_brassicae}"
+		" > {output.merged_genome}"

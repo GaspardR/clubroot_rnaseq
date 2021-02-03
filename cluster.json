@@ -18,19 +18,14 @@
     "cpus-per-task": "8",
     "time": "0-02:00:00"
   },
-  "STAR_generateGenome":
+  "kallisto_index":
   {
     "cpus-per-task": "16",
     "time": "0-02:00:00"
   },
-  "STAR_align":
+  "kallisto_quant":
   {
     "cpus-per-task": "16",
     "time": "0-01:00:00"
-  },
-  "coco_cc":
-  {
-      "cpus-per-task": "8",
-      "time": "0-02:00:00"
   },
 }

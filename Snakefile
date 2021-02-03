@@ -33,11 +33,13 @@ rule all:
 	input:
 		fastqc = get_fastqc(config),
 		quant = expand(
-			"results/kallisto/{var}.{treat}.{dai}.{N}.tsv",
+			os.path.join(
+				config["path"]["kallisto_quant"],
+				"{var}.{treat}.{dai}.{N}/abundance.tsv"
+			),
 			var = config["var"],
 			treat = config["treat"],
 			dai = config["dai"],
 			N = config["N"],
 		),
-
 		# DESeq2_results_directory = config['path']['DESeq2_results'],

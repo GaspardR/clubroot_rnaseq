@@ -109,11 +109,20 @@ rule kallisto_quant:
         kallisto_idx = rules.kallisto_index.output.kallisto_idx,
         fq = rules.trimmomatic.output.r
     output:
-        quant = "data/kallisto/{var}.{treat}.{dai}.{N}/abundance.tsv",
-        h5 = "data/kallisto/{var}.{treat}.{dai}.{N}/abundance.h5",
+        quant = Path(
+            config["path"]["kallisto_quant"],
+            "{var}.{treat}.{dai}.{N}/abundance.tsv"
+        ),
+        h5 = Path(
+            config["path"]["kallisto_quant"],
+            "{var}.{treat}.{dai}.{N}/abundance.h5"
+        )
     params:
         bootstrap = "50",
-        outdir = "data/kallisto/{var}.{treat}.{dai}.{N}/"
+        outdir = Path(
+            config["path"]["kallisto_quant"],
+            "{var}.{treat}.{dai}.{N}"
+        )
     log:
         "logs/kallisto/{var}.{treat}.{dai}.{N}.log"
     threads:
