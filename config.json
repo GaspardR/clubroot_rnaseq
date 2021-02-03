@@ -1,11 +1,10 @@
 {
-	"cultivars": ["BR", "LA"],
-	"treatment": ["C", "I"],
+	"var": ["BR", "LA"],
+	"treat": ["C", "I"],
 	"dai": ["7", "14", "21"],
-	"replicates": ["1", "2", "3"],
-	"strands": ["fwd", "rev"],
-	"paths": ["raw", "trimmed"],
-	"formats": ["html", "zip"],
+	"N": ["1", "2", "3"],
+	"strand": ["fwd", "rev"],
+	"format": ["html", "zip"],
 	"path":
 	{
 		"adapters": "data/references/adapters.fa",

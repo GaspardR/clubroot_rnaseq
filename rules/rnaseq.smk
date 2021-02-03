@@ -5,7 +5,10 @@ rule trimmomatic:
     input:
         r = rules.fasterq_dump.output
     output:
-        r = Path(config["path"]["trimmed"], "{var}.{treat}.{dai}.{N}_1.fastq")
+        r = Path(
+            config["path"]["trimmed"],
+            "{var}.{treat}.{dai}.{N}.trim.fastq"
+        )
     conda:
         "../envs/trimmomatic.yaml"
     log:
@@ -32,20 +35,29 @@ rule trimmomatic:
 
 rule fastqc:
     input:
-        fq = Path("data/datasets/{path}", "{var}.{treat}.{dai}.{N}_1.fastq")
+        fq = rules.fasterq_dump.output,
+        trim = rules.trimmomatic.output.r
     output:
-        html = Path(
+        raw_html = Path(
             config["path"]["qc"],
-            "{var}.{treat}.{dai}.{N}.{path}_fastqc.html"
+            "{var}.{treat}.{dai}.{N}_1_fastqc.html"
         ),
-        zip = Path(
+        raw_zip = Path(
             config["path"]["qc"],
-            "{var}.{treat}.{dai}.{N}.{path}_fastqc.zip"
+            "{var}.{treat}.{dai}.{N}_1_fastqc.zip"
+        ),
+        trim_html = Path(
+            config["path"]["qc"],
+            "{var}.{treat}.{dai}.{N}.trim_fastqc.html"
+        ),
+        trim_zip = Path(
+            config["path"]["qc"],
+            "{var}.{treat}.{dai}.{N}.trim_fastqc.zip"
         ),
     conda:
         "../envs/fastqc.yaml"
     log:
-        "logs/fastqc/{var}.{treat}.{dai}.{N}.{path}.log"
+        "logs/fastqc/{var}.{treat}.{dai}.{N}.log"
     params:
         outdir = config["path"]["qc"]
     threads:
@@ -55,7 +67,7 @@ rule fastqc:
         " --outdir {params.outdir}"
         " --format fastq"
         " --threads {threads}"
-        " {input.fq}"
+        " {input.fq} {input.trim}"
         " &> log"
 
 
