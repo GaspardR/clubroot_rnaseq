@@ -42,4 +42,5 @@ rule all:
 			dai = config["dai"],
 			N = config["N"],
 		),
+		combined = config["path"]["combined"]
 		# DESeq2_results_directory = config['path']['DESeq2_results'],
