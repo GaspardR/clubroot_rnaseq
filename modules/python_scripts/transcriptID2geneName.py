@@ -12,14 +12,10 @@ def transcript2gene(gtf_file):
             gene_id = ''
 
             if 'gene_id' in line:
-                gene_id = re.search(
-                    r'gene_name "(.*?)"[;,]', line
-                ).group(1)
+                gene_id = re.search(r'gene_id "(.*?)"[;,]', line).group(1)
                 gene_id = gene_id.split(',')[0]
             if 'transcript_id' in line:
-                trans_id = re.search(
-                    r'transcript_id "(.*?)"[;]', line
-                ).group(1)
+                trans_id = re.search(r'transcript_id "(.*?)"[;]', line).group(1)
 
             # Insert in tr dict
             if trans_id and gene_id and trans_id not in tr_dict:
