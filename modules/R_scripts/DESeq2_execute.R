@@ -13,30 +13,53 @@
 
 library(data.table)
 suppressMessages(library(DESeq2))
-break
-
+library("BiocParallel")
+register(MulticoreParam(snakemake@threads))
 
 ##############################################################
 ##### LOAD DATA
 ##############################################################
 
-
-## lload the DDS data
-readRDSloadRDS()
-
+## load the DDS data
+DESeq2_dds <- readRDS(
+    snakemake@input[['DESeq2_dds_init']]
+)
 
 ##############################################################
 ##### DATA FORMATING FOR DESEQ2 
 ##############################################################
 
+## DESeq2 function for gene expression analysis
+deseq2_analysis <- function(
+    dds
+) {
 
+    ## filtered genes that do not have a lot of counting
+    keep <- rowSums(counts(dds)) >= 10
+    dds2 <- dds[keep, ]
+
+    ## differential expression analysis
+    dds2 <- DESeq(
+        dds2,
+        parallel = TRUE
+    )
+
+    ## return dds2
+    return(dds2)
+}
 
 
 ##############################################################
 ##### WRITE THE OUTPUTS
 ##############################################################
 
-## create the directory
-dir.create(snakemake@output[["DESeq2_results_directory"]])
+dds2 <- deseq2_analysis(
+    DESeq2_dds
+)
 
-## save the dds object
+## save the dds2 object
+saveRDS(
+    dds2,
+    file = snakemake@output[["DESeq2_dds_execute"]]
+)
+

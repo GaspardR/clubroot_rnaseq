@@ -12,8 +12,8 @@
 
 
 library(data.table)
-# suppressMessages(library(DESeq2))
 library(tidyverse)
+ suppressMessages(library(DESeq2))
 
 ##############################################################
 ##### LOAD DATA
@@ -25,11 +25,14 @@ dt_combined_counts <- fread(
     file = snakemake@input[['combined']]
 )
 
+##############################################
+### Create DESeq2 inputs 
+##############################################
 
-##############################################################
-##### DATA FORMATING FOR DESEQ2 
-##############################################################
 
+##########
+## Sample information data
+##########
 
 ## extract the colnames that correspond to the sample id (removing the 'gene' names)
 sample_id <- colnames(dt_combined_counts)[colnames(dt_combined_counts) != 'gene']
@@ -51,188 +54,136 @@ sample_information <- cbind(
     )
 )
 
+## new colunm names
+new_col_names <- c(
+    'treat',
+    'condition',
+    'dai',
+    'replicate'
+)
+
 ## rename column
 sample_information <- sample_information [
     ,
     setnames(
         .SD,
-        c('V1', 'V2', 'V3'),
-        c('treat', 'condition', 'dai')
+        c('V1', 'V2', 'V3', 'V4'),
+        new_col_names
     )
 ]
 
-## extract the information for each condition
-treats <- unique(unlist(sample_information[, 'treat']))
-conditions <- unique(unlist(sample_information[, 'condition']))
-dai <- unique(unlist(sample_information[, 'dai']))
+##########
+## Expression data
+##########
 
-extract_colData_and_expressionData <- function(
-    sample_information_datatable_input, # data table containing the sample_id, treat, condition and dai column names
-    comparaison_name
+## Fonction for extract the expression data from the sample contained in the sample information data and put the sample in the same order
+generate_deseq2_inputs <- function(
+    sample_information_datatable # data table containing the sample_id, treat, condition and dai column names
 ) {
 
     ## extract the sample of interest contained in the sample information input
-    sample_of_interest <- unlist(sample_information_datatable_input[, sample_id])
+    sample_of_interest <- unlist(sample_information_datatable[, sample_id])
 
     ## extract expression data of the sample of interest
     dt_combined_counts_subset <- copy(
         dt_combined_counts[, c('gene', sample_of_interest), with = F]
     )
-    
-    ## transform the sample information data table input into a data frame
-    sample_information_dataframe <- data.frame(
-        sample_information_datatable_input,
-        row.names = sample_information_datatable_input[, sample_id]
+
+    ## transform the expression data table into data frame
+    expression_dataframe <- data.frame(
+        dt_combined_counts_subset[,-c('gene'), with = F],
+        row.names = dt_combined_counts_subset[, gene]
     )
 
-    ## put the expression data and the count into a list and rename it
-    output <- list()
-    output[[comparaison_name]]['count'] <- list(dt_combined_counts_subset)
-    output[[comparaison_name]]['information'] <- list(sample_information_dataframe)
+    ## transform all the values into numeric values
+    expression_dataframe <- apply(
+        expression_dataframe,
+        c(1,2),
+        function(x) round(as.numeric(x))
+    )
 
-    ## return the output
+    ## transform the sample information data table input into a data frame
+    sample_information_dataframe <- data.frame(
+        sample_information_datatable[, -c('sample_id'), with = F],
+        row.names = sample_information_datatable[, sample_id]
+    )
+
+    ## transform all the values of the sample information to character
+    sample_information_dataframe <- apply(
+        sample_information_dataframe,
+        c(1,2),
+        function(x) as.character(x)
+    )
+
+    ## transform the character to factors
+    sample_information_dataframe <- apply(
+        sample_information_dataframe,
+        c(2),
+        function(x) factor(x)
+    )
+
+    sample_information_dataframe[,'treat'] <- factor(sample_information_dataframe[, 'treat'])
+
+
+    ## put the expression data and the sample information into a list
+    output <- list()
+    output['count'] <- list(expression_dataframe)
+    output['information'] <- list(sample_information_dataframe)
+
+    ## return the list that contain the count and sample information data
     return(output)
 }
 
 
-#############################################
-## create DESeq2 inputs 
-#############################################
-
-## initialize the list that will contain the deseq2 input
-deseq2_data_input_list <- list()
-
-## for each dai
-for (i in seq(1, length(dai), 1)) {
-
-    # cat('\n\n\n')
-
-    ## copy the data information
-    dt_sample_information_subset <- as.data.table(copy(sample_information))
-
-    ## extract the value of the dai of interest
-    dai_values <- dai[i]
-
-    ## extract the data associated with the dai of interest
-    dt_sample_information_subset <- dt_sample_information_subset[dai == dai_values,]
-
-    ## create the name of the comparison
-    comparaison_name <- paste(
-        'dai_',
-        dai_values,
-        sep = ''
-    )
-
-    ## extract the expression data associated with the sample id of interest and parse the data for DESeq2
-    data_output <- extract_colData_and_expressionData(
-        dt_sample_information_subset,
-        comparaison_name
-    )
-
-    ## put the data into the deseq2_data_input_list
-    deseq2_data_input_list[comparaison_name] <- data_output
-}
-
-## for each dai combinations
-
-## do all the two combiination of the dai
-dai_combination <- combn(
-    dai,
-    m = 2
-)
-
-## for each condition and each combination of the dai
-
-for (condition_index in seq(1, length(conditions), 1)) {
-
-    ## extract the condition value
-    condition_value <- conditions[condition_index]
-
-    for (dai_combination_index in seq(1, ncol(dai_combination), 1)) {
-
-        # cat('\n\n\n')
-
-        ## copy the data information
-        dt_sample_information_subset <- as.data.table(copy(sample_information))
-
-        ## extract the combination of dai of interest
-        dai_values <- dai_combination[,dai_combination_index]
-
-        ## extract the data associated with the condition the dai combination of interest
-        dt_sample_information_subset <- dt_sample_information_subset[dai %in% dai_values,]
-        dt_sample_information_subset <- dt_sample_information_subset[condition == condition_value, ]
-
-        ## create the name of the comparison
-        comparison_name <- paste(
-            condition_value,
-            '.',
-            'dai_',
-            dai_values[1],
-            '_vs_',
-            'dai_',
-            dai_values[2],
-            sep = ''
-        )
-
-        ## extract the expression data associated with the sample id of interest and parse the data for DESeq2
-        data_output <- extract_colData_and_expressionData(
-            dt_sample_information_subset,
-            comparison_name
-        )
-
-        ## put the data into the deseq2_data_input_list
-        deseq2_data_input_list[comparison_name] <- data_output
-    }
-}
-
-print(deseq2_data_input_list)
-
-# break
-
-
-
-
-
-
-
-
-
-
-
-
-
 ##############################################################
-##### EXECUTE DESEQ2 for each input
+##### create a dds object 
 ##############################################################
 
-for (input_index in seq(1, length(deseq2_data_input_list), 1)) {
 
-    ## extract the comparison name
-    comparison_name <- names(deseq2_data_input_list[input_index])
-
-    print(comparison_name)
-    next
+## function for create a dds object
+create_dds_object <- function(
+    deseq2_input, # list of inputs generated by the function "generate_deseq2_inputs",
+    dds_path
+) {
 
     ## create the dds object
     dds <- DESeqDataSetFromMatrix(
-        countData = deseq2_data_input_list[[comparison_name]]['count'],
-        colData = deseq2_data_input_list[[comparison_name]]['information'],
-        design = ~ dai + condition + treat
-    )
-
-    ## save the dds object
-    saveRDS(
-        dds,
-        file = paste(
-            snakemake@output[["DESeq2_dds_directory"]],
-            '/',
-            'comparison_name',
-            '.dds',
-            sep = ''
+            countData = deseq2_input[['count']],
+            colData = deseq2_input[['information']],
+            design = ~ replicate + dai + condition + treat 
         )
-    )
 
+        ## save the dds object
+        saveRDS(
+            dds,
+            file = dds_path
+        )
 }
 
 
-break
+##############################################################
+##### Initialize the input of DESeq2
+##############################################################
+
+## extract expression data from the sample information
+deseq2_input <- generate_deseq2_inputs(
+    sample_information_datatable = sample_information
+)
+
+## save the sample information
+fwrite(
+    sample_information,
+    snakemake@output[['DESeq2_sample_information']],
+    sep = ','
+)
+
+## create dds object
+create_dds_object(
+    deseq2_input = deseq2_input,
+    dds_path = paste(
+        snakemake@output[['DESeq2_dds_init']]
+    )
+)
+
+
+

@@ -31,16 +31,16 @@ def get_fastqc(config):
 
 rule all:
 	input:
-		fastqc = get_fastqc(config),
-		quant = expand(
-			os.path.join(
-				config["path"]["kallisto_quant"],
-				"{var}.{treat}.{dai}.{N}/abundance.tsv"
-			),
-			var = config["var"],
-			treat = config["treat"],
-			dai = config["dai"],
-			N = config["N"],
-		),
-		combined = config["path"]["combined"]
-		# DESeq2_results_directory = config['path']['DESeq2_results'],
+		DESeq2_results_directory = config['path']['DESeq2_results'],
+		#fastqc = get_fastqc(config),
+		#quant = expand(
+		#	os.path.join(
+		#		config["path"]["kallisto_quant"],
+		#		"{var}.{treat}.{dai}.{N}/abundance.tsv"
+		#	),
+		#	var = config["var"],
+		#	treat = config["treat"],
+		#	dai = config["dai"],
+		#	N = config["N"],
+		#),
+		#combined = config["path"]["combined"]
