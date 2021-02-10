@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 
+
 rule trimmomatic:
     input:
         r = rules.fasterq_dump.output
@@ -31,6 +32,7 @@ rule trimmomatic:
         " {output.r}"
         " {params.trimmer}"
         " &> {log}"
+
 
 rule fastqc:
     input:
@@ -141,21 +143,22 @@ rule kallisto_quant:
         "&> {log}"
 
 
-# rule combine_gene_quantification:
-#     input:
-#         counts = expand(
-#             os.path.join(
-#                 config['path']['coco_cc'],
-#                 '{var}.{treat}.{dai}.{N}.tsv'
-#             ),
-#             var = config['cultivars'],
-#             treat = config['treatment'],
-#             dai = config['dai'],
-#             N = config['replicates']
-#         )
-#     output:
-#         combined = config['path']['combined']
-#     conda:
-#         '../envs/pypackages.yaml'
-#     script:
-#         '../modules/python_scripts/combine_gene_quantification.py'
+rule combine_gene_quantification:
+    input:
+        counts = expand(
+            os.path.join(
+                config["path"]["kallisto_quant"],
+                "{var}.{treat}.{dai}.{N}/abundance.tsv"
+            ),
+            var = config["var"],
+            treat = config["treat"],
+            dai = config["dai"],
+            N = config["N"]
+        ),
+        map = rules.transcriptID2geneName.output.map
+    output:
+        combined = config["path"]["combined"]
+    conda:
+        "../envs/pypackages.yaml"
+    script:
+        "../modules/python_scripts/combine_gene_quantification.py"
