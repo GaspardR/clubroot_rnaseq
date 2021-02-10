@@ -86,3 +86,14 @@ rule merge_genome:
 	shell:
 		"cat {input.brassica_napus} {input.plasmodiophora_brassicae}"
 		" > {output.merged_genome}"
+
+
+rule transcriptID2geneName:
+	input:
+		gtf = config["path"]["merged_annotation"]
+	output:
+		map = config["path"]["map"]
+	conda:
+		"../envs/pypackages.yaml"
+	script:
+		"../modules/python_scripts/transcriptID2geneName.py"

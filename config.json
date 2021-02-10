@@ -15,6 +15,7 @@
 		"transcriptome": "data/references/transcriptome.fa",
 		"merged_genome": "data/references/merged_genome.fa",
 		"merged_annotation": "data/references/merged_annotation.gtf",
+		"map": "data/references/transcript_to_gene.tsv",
 		"raw": "data/datasets/raw",
 		"trimmed": "data/datasets/trimmed",
 		"qc": "data/datasets/fastqc",
