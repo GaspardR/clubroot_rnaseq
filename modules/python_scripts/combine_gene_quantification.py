@@ -13,4 +13,4 @@ for file in snakemake.input.counts:
 
 ref_df.drop(columns="transcript", inplace=True)
 ref_df = ref_df.groupby("gene").sum()
-ref_df.to_csv(snakemake.output.combined, header=True, index=False)
+ref_df.to_csv(snakemake.output.combined, header=True)
