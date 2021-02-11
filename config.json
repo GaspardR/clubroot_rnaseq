@@ -21,10 +21,10 @@
 		"qc": "data/datasets/fastqc",
 		"design": "design.tsv",
 		"combined": "data/datasets/combined/all.csv",
-		"DESeq2_dds_init": "data/DESeq2/DESeq2_init.dds",
-		"DESeq2_dds_execute": "data/DESeq2/DESeq2_execute.dds",
+		"DESeq2_dds_init_dir": "data/DESeq2/DESeq2_init",
+		"DESeq2_dds_execute_dir": "data/DESeq2/DESeq2_execute",
 		"DESeq2_sample_information": "data/DESeq2/DESeq2_sample_information.csv",
-		"DESeq2_results": "data/DESeq2/results",
+		"DESeq2_results": "data/DESeq2/DESeq2_results",
 		"kallisto_idx": "data/references/kallisto.idx",
 		"kallisto_quant": "data/datasets/kallisto"
 	},

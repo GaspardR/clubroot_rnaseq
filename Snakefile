@@ -31,7 +31,25 @@ def get_fastqc(config):
 
 rule all:
 	input:
-		DESeq2_results_directory = config['path']['DESeq2_results'],
+		results = expand(
+				os.path.join(
+            	config['path']['DESeq2_results'],
+            	'results_condition_{condition_dai}.csv'
+        	),
+			condition_dai = condition_dai
+		),
+		#dds_execute = expand(
+		#		os.path.join(
+		#			config['path']['DESeq2_dds_execute_dir'],
+		#			'dds_execute_condition_{condition_dai}.dds'
+		#		),
+		#	condition_dai = condition_dai
+		#),
+
+
+
+
+
 		#fastqc = get_fastqc(config),
 		#quant = expand(
 		#	os.path.join(

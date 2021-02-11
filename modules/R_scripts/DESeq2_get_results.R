@@ -20,9 +20,10 @@ register(MulticoreParam(snakemake@threads))
 ##### LOAD DATA
 ##############################################################
 
+
 ## load the DDS data
 DESeq2_dds_execute <- readRDS(
-    snakemake@input[['DESeq2_dds_execute']]
+    snakemake@input[['dds_execute']]
 )
 
 ##############################################################
@@ -78,15 +79,9 @@ condition_results <- deseq2_get_results(
 ##### WRITE THE OUTPUTS
 ##############################################################
 ## create the directory
-dir.create(snakemake@output[["DESeq2_results_directory"]])
+#dir.create(snakemake@output[["DESeq2_results_directory"]])
 
 fwrite(
     condition_results,
-    paste(
-        snakemake@output[["DESeq2_results_directory"]],
-        '/',
-        'results_condition_CvsI',
-        '.csv',
-        sep = ""
-    )    
+    snakemake@output[['results']]   
 )

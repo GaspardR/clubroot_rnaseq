@@ -16,13 +16,14 @@ suppressMessages(library(DESeq2))
 library("BiocParallel")
 register(MulticoreParam(snakemake@threads))
 
+
 ##############################################################
 ##### LOAD DATA
 ##############################################################
 
 ## load the DDS data
 DESeq2_dds <- readRDS(
-    snakemake@input[['DESeq2_dds_init']]
+    snakemake@input[['dds_init']]
 )
 
 ##############################################################
@@ -57,9 +58,14 @@ dds2 <- deseq2_analysis(
     DESeq2_dds
 )
 
+
+## create the directory that contain the dds_excute output
+#dir.create(snakemake@output[["DESeq2_dds_execute"]])
+
 ## save the dds2 object
 saveRDS(
     dds2,
-    file = snakemake@output[["DESeq2_dds_execute"]]
+    file = snakemake@output[['dds_execute']],
+
 )
 
