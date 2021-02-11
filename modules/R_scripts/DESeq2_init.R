@@ -25,8 +25,6 @@ dt_combined_counts <- fread(
     file = snakemake@input[['combined']]
 )
 
-## create the dir that contain the output files
-#dir.create(snakemake@output[['DESeq2_dds_init_dir']])
 
 ##############################################
 ### Create DESeq2 inputs 

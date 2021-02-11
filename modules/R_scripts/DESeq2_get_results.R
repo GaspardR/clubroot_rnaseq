@@ -71,15 +71,13 @@ condition_results <- deseq2_get_results(
         "C",
         "I"
     ),
-    padj_treshold = 0.001,
+    padj_treshold = 1,
     fc_threshold = 2
 )
 
 ##############################################################
 ##### WRITE THE OUTPUTS
 ##############################################################
-## create the directory
-#dir.create(snakemake@output[["DESeq2_results_directory"]])
 
 fwrite(
     condition_results,
