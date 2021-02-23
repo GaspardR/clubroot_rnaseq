@@ -35,6 +35,7 @@ rule DESeq2_init:
 
 condition_dai = [
     'all',
+    #'all_infected',
     '7',
     '14',
     '21'
@@ -59,7 +60,6 @@ rule DESeq2_execute:
     script:
         '../modules/R_scripts/DESeq2_execute.R'
 
-
 rule DESeq2_get_results:
     input:
         dds_execute = rules.DESeq2_execute.output.dds_execute
@@ -68,9 +68,25 @@ rule DESeq2_get_results:
             config['path']['DESeq2_results'],
             'results_condition_{condition_dai}.csv'
         ),
+    params: 
+        condition = '{condition_dai}'
     threads:
         1
     conda:
         '../envs/DESeq2.yaml'
     script:
         '../modules/R_scripts/DESeq2_get_results.R'
+
+rule generate_volcanoplot:
+    input:
+        results = rules.DESeq2_get_results.output.results
+    output:
+        volcanoplot = os.path.join(
+            config['path']['volcanoplots'],
+            'volcanoplot_condition_{condition_dai}.png'
+        ),
+
+    conda:
+        "../envs/DESeq2.yaml"
+    script:
+        '../modules/R_scripts/generate_volcanoplot.R'

@@ -31,10 +31,10 @@ def get_fastqc(config):
 
 rule all:
 	input:
-		results = expand(
+		volcanoplot = expand(
 				os.path.join(
-            	config['path']['DESeq2_results'],
-            	'results_condition_{condition_dai}.csv'
+            	config['path']['volcanoplots'],
+            	'volcanoplot_condition_{condition_dai}.png'
         	),
 			condition_dai = condition_dai
 		),

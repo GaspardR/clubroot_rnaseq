@@ -209,6 +209,30 @@ create_dds_object(
 
 
 ##########
+## dot the same but for only infected samples
+##########
+
+# extract expression data from the sample information
+deseq2_input <- generate_deseq2_inputs(
+    sample_information_datatable = sample_information[condition == 'I', !c('condition'), with = F]
+)
+
+## create dds object
+create_dds_object(
+    deseq2_input = deseq2_input,
+    formula = formula('~ replicate + treat + dai'),
+    dds_path = paste(
+        snakemake@output[['DESeq2_dds_init_dir']],
+        '/',
+        'dds_init_condition',
+        '_',
+        'all_infected',
+        '.dds',
+        sep = ''
+    )
+)
+
+##########
 ## dot the same but for each dai
 ##########
 
@@ -257,7 +281,7 @@ for (i_dai in seq(1, length(dai))) {
     #)
 }
 
-
+#Sys.sleep(1000)
 
 
 

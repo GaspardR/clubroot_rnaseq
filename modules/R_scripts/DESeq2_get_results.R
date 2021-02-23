@@ -51,7 +51,7 @@ deseq2_get_results <- function(
     ## transform the data frame to data table and reorder the genes with the pvalues
     DE_gene_results <- as.data.table(
         DE_gene_results,
-        keep.rownames = T
+        keep.rownames = 'gene_name'
     )[order(padj, decreasing = FALSE),]
 
     ## filter by the padj
@@ -72,7 +72,7 @@ condition_results <- deseq2_get_results(
         "I"
     ),
     padj_treshold = 1,
-    fc_threshold = 2
+    fc_threshold = 0
 )
 
 ##############################################################

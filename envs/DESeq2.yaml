@@ -6,6 +6,8 @@ channels:
 dependencies:
   - r=3.6.0
   - r-data.table=1.12.2
-  - r-tidyverse
-  - bioconductor-deseq2
+  - r-tidyverse=1.2.1
+  - bioconductor-deseq2=1.26.0
   - libopenblas=0.3.10
+  - bioconductor-enhancedvolcano=1.4.0
+  - r-svglite 
