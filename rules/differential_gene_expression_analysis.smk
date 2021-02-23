@@ -7,8 +7,8 @@
 
 rule DESeq2_init:
     input:
-        # combined = rules.combine_gene_quantification.output.combined
-        combined = 'data/all.csv'
+        combined = rules.combine_gene_quantification.output.combined
+        #combined = 'data/all.csv'
     output:
         DESeq2_dds_init_dir = directory(config['path']['DESeq2_dds_init_dir']),
         dds_init_condition_all = os.path.join(

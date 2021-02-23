@@ -38,27 +38,15 @@ rule all:
         	),
 			condition_dai = condition_dai
 		),
-		#dds_execute = expand(
-		#		os.path.join(
-		#			config['path']['DESeq2_dds_execute_dir'],
-		#			'dds_execute_condition_{condition_dai}.dds'
-		#		),
-		#	condition_dai = condition_dai
-		#),
-
-
-
-
-
-		#fastqc = get_fastqc(config),
-		#quant = expand(
-		#	os.path.join(
-		#		config["path"]["kallisto_quant"],
-		#		"{var}.{treat}.{dai}.{N}/abundance.tsv"
-		#	),
-		#	var = config["var"],
-		#	treat = config["treat"],
-		#	dai = config["dai"],
-		#	N = config["N"],
-		#),
-		#combined = config["path"]["combined"]
+		fastqc = get_fastqc(config),
+		quant = expand(
+			os.path.join(
+				config["path"]["kallisto_quant"],
+				"{var}.{treat}.{dai}.{N}/abundance.tsv"
+			),
+			var = config["var"],
+			treat = config["treat"],
+			dai = config["dai"],
+			N = config["N"],
+		),
+		combined = config["path"]["combined"]
