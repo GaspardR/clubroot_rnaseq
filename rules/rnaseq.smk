@@ -118,6 +118,10 @@ rule kallisto_quant:
         h5 = Path(
             config["path"]["kallisto_quant"],
             "{var}.{treat}.{dai}.{N}/abundance.h5"
+        ),
+        pseudobam = Path(
+            config["path"]["kallisto_quant"],
+            "{var}.{treat}.{dai}.{N}/pseudoalignments.bam"
         )
     params:
         bootstrap = "50",
@@ -139,6 +143,7 @@ rule kallisto_quant:
         "--bootstrap-samples={params.bootstrap} "
         "--threads={threads} "
         "--single -l 200 -s 20 "
+        "--pseudobam "
         "{input.fq} "
         "&> {log}"
 
@@ -162,3 +167,20 @@ rule combine_gene_quantification:
         "../envs/pypackages.yaml"
     script:
         "../modules/python_scripts/combine_gene_quantification.py"
+
+
+rule bedgraph:
+    input:
+        bam = rules.kallisto_quant.output.pseudobam,
+        genome = config["path"]["chrNameLength"]
+    output:
+        Path(
+            config["path"]["bedgraph"],
+            "{var}.{treat}.{dai}.{N}.bedgraph"
+        )
+    params:
+        p = ["-bg", "-split", "-ibam"]
+    conda:
+        "../envs/bedtools.yaml"
+    shell:
+        "bedtools genomecov {params.p} {input.bam} -g {input.genome} > {output}"
