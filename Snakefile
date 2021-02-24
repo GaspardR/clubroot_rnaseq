@@ -31,6 +31,13 @@ def get_fastqc(config):
 
 rule all:
 	input:
+		volcanoplot = expand(
+				os.path.join(
+            	config['path']['volcanoplots'],
+            	'volcanoplot_condition_{condition_dai}.png'
+        	),
+			condition_dai = condition_dai
+		),
 		fastqc = get_fastqc(config),
 		quant = expand(
 			os.path.join(
@@ -43,4 +50,3 @@ rule all:
 			N = config["N"],
 		),
 		combined = config["path"]["combined"]
-		# DESeq2_results_directory = config['path']['DESeq2_results'],
