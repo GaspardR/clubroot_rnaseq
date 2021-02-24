@@ -13,7 +13,7 @@
 
 library(data.table)
 library(tidyverse)
- suppressMessages(library(DESeq2))
+suppressMessages(library(DESeq2))
 
 ##############################################################
 ##### LOAD DATA
@@ -191,6 +191,12 @@ deseq2_input <- generate_deseq2_inputs(
 #    ),
 #    sep = ','
 #)
+
+fwrite(
+    sample_information,
+    snakemake@output[['sample_information']],
+    sep = ','
+)
 
 ## create dds object
 create_dds_object(

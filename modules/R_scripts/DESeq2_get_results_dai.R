@@ -29,6 +29,7 @@ DESeq2_dds_execute <- readRDS(
 ## wild card
 wildcard <- snakemake@params[['condition']]
 
+
 ##############################################################
 ##### DATA FORMATING FOR DESEQ2 
 ##############################################################
@@ -66,31 +67,39 @@ deseq2_get_results <- function(
     return(DE_gene_results)
 }
 
-if (wildcard != 'all_infected') {
-    condition_results <- deseq2_get_results(
-        dds = DESeq2_dds_execute,
-        contrast = c(
-            "condition",
-            "C",
-            "I"
-        ),
-        padj_treshold = 1,
-        fc_threshold = 0
-    )
-}
+results_dai_7vs14 <- deseq2_get_results(
+    dds = DESeq2_dds_execute,
+    contrast = c(
+        "dai",
+        "7",
+        "14"
+    ),
+    padj_treshold = 1,
+    fc_threshold = 0
+)
 
-if (wildcard == 'all_infected') {
-    condition_results <- deseq2_get_results(
-        dds = DESeq2_dds_execute,
-        contrast = c(
-            "dai",
-            "7",
-            "14"
-        ),
-        padj_treshold = 1,
-        fc_threshold = 0
-    )
-}
+results_dai_7vs21 <- deseq2_get_results(
+    dds = DESeq2_dds_execute,
+    contrast = c(
+        "dai",
+        "7",
+        "21"
+    ),
+    padj_treshold = 1,
+    fc_threshold = 0
+)
+
+results_dai_14vs21 <- deseq2_get_results(
+    dds = DESeq2_dds_execute,
+    contrast = c(
+        "dai",
+        "14",
+        "21"
+    ),
+    padj_treshold = 1,
+    fc_threshold = 0
+)
+
 
 
 ##############################################################
@@ -98,6 +107,16 @@ if (wildcard == 'all_infected') {
 ##############################################################
 
 fwrite(
-    condition_results,
-    snakemake@output[['results']]   
+    results_dai_7vs14,
+    snakemake@output[['results_dai_7vs14']]   
+)
+
+fwrite(
+    results_dai_7vs21,
+    snakemake@output[['results_dai_7vs21']]   
+)
+
+fwrite(
+    results_dai_14vs21,
+    snakemake@output[['results_dai_14vs21']]   
 )

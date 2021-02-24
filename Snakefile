@@ -38,15 +38,18 @@ rule all:
         	),
 			condition_dai = condition_dai
 		),
-		fastqc = get_fastqc(config),
-		quant = expand(
-			os.path.join(
-				config["path"]["kallisto_quant"],
-				"{var}.{treat}.{dai}.{N}/abundance.tsv"
-			),
-			var = config["var"],
-			treat = config["treat"],
-			dai = config["dai"],
-			N = config["N"],
-		),
-		combined = config["path"]["combined"]
+
+		expression_profile = "data/figures/expression_profile.png",
+
+		#fastqc = get_fastqc(config),
+		#quant = expand(
+		#	os.path.join(
+		#		config["path"]["kallisto_quant"],
+		#		"{var}.{treat}.{dai}.{N}/abundance.tsv"
+		#	),
+		#	var = config["var"],
+		#	treat = config["treat"],
+		#	dai = config["dai"],
+		#	N = config["N"],
+		#),
+		#combined = config["path"]["combined"]
