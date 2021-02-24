@@ -16,6 +16,7 @@
 		"merged_genome": "data/references/merged_genome.fa",
 		"merged_annotation": "data/references/merged_annotation.gtf",
 		"map": "data/references/transcript_to_gene.tsv",
+		"chrNameLength": "data/references/chrNameLength.tsv",
 		"raw": "data/datasets/raw",
 		"trimmed": "data/datasets/trimmed",
 		"qc": "data/datasets/fastqc",
@@ -27,7 +28,8 @@
 		"DESeq2_results": "data/DESeq2/DESeq2_results",
 		"volcanoplots": "data/figures/volcanoplots",
 		"kallisto_idx": "data/references/kallisto.idx",
-		"kallisto_quant": "data/datasets/kallisto"
+		"kallisto_quant": "data/datasets/kallisto",
+		"bedgraph": "data/datasets/bedgraph"
 	},
 	"download":
 	{

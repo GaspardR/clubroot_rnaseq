@@ -49,4 +49,14 @@ rule all:
 			dai = config["dai"],
 			N = config["N"],
 		),
-		combined = config["path"]["combined"]
+		combined = config["path"]["combined"],
+		bedgraph = expand(
+			os.path.join(
+				config["path"]["bedgraph"],
+				"{var}.{treat}.{dai}.{N}.bedgraph"
+			),
+			var = config["var"],
+			treat = config["treat"],
+			dai = config["dai"],
+			N = config["N"],
+		),
