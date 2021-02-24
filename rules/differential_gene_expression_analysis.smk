@@ -10,7 +10,7 @@ rule DESeq2_init:
         combined = rules.combine_gene_quantification.output.combined
         #combined = 'data/all.csv'
     output:
-        DESeq2_dds_init_dir = directory(config['path']['DESeq2_dds_init_dir']),
+        # DESeq2_dds_init_dir = directory(config['path']['DESeq2_dds_init_dir']),
         dds_init_condition_all = os.path.join(
             config['path']['DESeq2_dds_init_dir'],
             "dds_init_condition_all.dds"
@@ -68,7 +68,7 @@ rule DESeq2_get_results:
             config['path']['DESeq2_results'],
             'results_condition_{condition_dai}.csv'
         ),
-    params: 
+    params:
         condition = '{condition_dai}'
     threads:
         1
