@@ -1,0 +1,5 @@
+channels:
+  - defaults
+  - bioconda
+dependencies:
+  - bioawk ==1.0

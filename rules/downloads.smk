@@ -97,3 +97,16 @@ rule transcriptID2geneName:
 		"../envs/pypackages.yaml"
 	script:
 		"../modules/python_scripts/transcriptID2geneName.py"
+
+
+rule chrNameLength:
+	input:
+		rules.merge_genome.output.merged_genome
+	output:
+		config["path"]["chrNameLength"]
+	conda:
+		"../envs/bioawk.yaml"
+	shell:
+		"""
+        bioawk -c fastx '{{print $name "\t" length($seq)}}' {input} > {output}
+        """
