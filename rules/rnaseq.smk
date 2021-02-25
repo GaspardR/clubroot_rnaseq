@@ -183,4 +183,6 @@ rule bedgraph:
     conda:
         "../envs/bedtools.yaml"
     shell:
-        "bedtools genomecov {params.p} {input.bam} -g {input.genome} > {output}"
+        "samtools sort {input.bam}"
+        " | bedtools genomecov {params.p} stdin -g {input.genome}"
+        " > {output}"
