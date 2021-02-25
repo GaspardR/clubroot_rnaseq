@@ -2,4 +2,5 @@ channels:
   - bioconda
   - defaults
 dependencies:
+  - samtools ==1.9
   - bedtools ==2.28.0
