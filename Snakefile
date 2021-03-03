@@ -33,13 +33,13 @@ rule all:
 	input:
 		volcanoplot = expand(
 				os.path.join(
-            	config['path']['volcanoplots'],
+            	config['path']['volcano_plots'],
             	'volcanoplot_condition_{condition_dai}.png'
         	),
 			condition_dai = condition_dai
 		),
 
-		expression_profile = "data/figures/expression_profile.png",
+		expression_profile = (config['path']['expressionprofil_plots']),
 
 		#fastqc = get_fastqc(config),
 		#quant = expand(

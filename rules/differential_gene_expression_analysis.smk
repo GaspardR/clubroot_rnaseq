@@ -129,7 +129,7 @@ rule generate_volcanoplot:
         results = rules.DESeq2_get_results.output.results
     output:
         volcanoplot = os.path.join(
-            config['path']['volcanoplots'],
+            config['path']['volcano_plots'],
             'volcanoplot_condition_{condition_dai}.png'
         ),
     conda:
@@ -149,7 +149,9 @@ rule generate_expression_profile:
         results_dai_7vs21 = rules.DESeq2_get_results_dai.output.results_dai_7vs21,
         results_dai_14vs21 = rules.DESeq2_get_results_dai.output.results_dai_14vs21,
     output:
-        expression_profile = "data/figures/expression_profile.png",
+        expression_profile = directory(
+            config['path']['expressionprofil_plots']
+        )
     conda:
         "../envs/DESeq2.yaml"
     script:

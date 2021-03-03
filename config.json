@@ -25,7 +25,8 @@
 		"DESeq2_dds_execute_dir": "data/DESeq2/DESeq2_execute",
 		"DESeq2_sample_information": "data/DESeq2/DESeq2_sample_information.csv",
 		"DESeq2_results": "data/DESeq2/DESeq2_results",
-		"volcanoplots": "data/figures/volcanoplots",
+		"volcano_plots": "data/figures/volcano_plots",
+		"expressionprofil_plots" : "data/figures/expressionprofil_plots",
 		"kallisto_idx": "data/references/kallisto.idx",
 		"kallisto_quant": "data/datasets/kallisto"
 	},
