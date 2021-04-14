@@ -118,10 +118,6 @@ rule kallisto_quant:
         h5 = Path(
             config["path"]["kallisto_quant"],
             "{var}.{treat}.{dai}.{N}/abundance.h5"
-        ),
-        pseudobam = Path(
-            config["path"]["kallisto_quant"],
-            "{var}.{treat}.{dai}.{N}/pseudoalignments.bam"
         )
     params:
         bootstrap = "50",
@@ -143,7 +139,6 @@ rule kallisto_quant:
         "--bootstrap-samples={params.bootstrap} "
         "--threads={threads} "
         "--single -l 200 -s 20 "
-        "--pseudobam "
         "{input.fq} "
         "&> {log}"
 
@@ -169,9 +164,73 @@ rule combine_gene_quantification:
         "../modules/python_scripts/combine_gene_quantification.py"
 
 
+# Use STAR for bedgraphs
+rule STAR_index:
+    input:
+        genome = rules.merge_genome.output.merged_genome,
+        gtf = rules.merge_annotation.output.merged_annotation
+    output:
+        directory(config["path"]["STAR_ref"])
+    conda:
+        "../envs/STAR.yaml"
+    threads:
+        16
+    log:
+        "logs/STAR_index.log"
+    shell:
+        "mkdir {output}"
+        " && STAR"
+        " --runMode genomeGenerate"
+        " --runThreadN {threads}"
+        " --genomeDir {output}"
+        " --genomeFastaFiles {input.genome}"
+        " --sjdbGTFfile {input.gtf}"
+        " --sjdbOverhang 74"
+
+
+rule STAR_align:
+    input:
+        r = rules.trimmomatic.output.r,
+        index = Path(config["path"]["STAR_ref"])
+    output:
+        bam = Path(
+            config["path"]["STAR_align"],
+            "{var}.{treat}.{dai}.{N}.Aligned.sortedByCoord.out.bam"
+        )
+    conda:
+        "../envs/STAR.yaml"
+    params:
+        outFileNamePrefix = os.path.join(
+            config["path"]["STAR_align"],
+            "{var}.{treat}.{dai}.{N}."
+        )
+    threads:
+        16
+    log:
+        "logs/STAR_align.{var}.{treat}.{dai}.{N}.log"
+    shell:
+        "STAR"
+        " --runMode alignReads"
+        " --genomeDir {input.index}"
+        " --readFilesIn {input.r}"
+        " --outFileNamePrefix {params.outFileNamePrefix}"
+        " --runThreadN {threads}"
+        " --readFilesCommand zcat"
+        " --outReadsUnmapped Fastx"
+        " --outStd Log"
+        " --outSAMtype BAM SortedByCoordinate"
+        " --outSAMunmapped None"
+        " --outFilterType BySJout"
+        " --outFilterMismatchNmax 5"
+        " --alignIntronMax 2500"
+        " --alignMatesGapMax 14750"
+        " &> {log}"
+
+
+
 rule bedgraph:
     input:
-        bam = rules.kallisto_quant.output.pseudobam,
+        bam = rules.STAR_align.output.bam,
         genome = config["path"]["chrNameLength"]
     output:
         Path(
