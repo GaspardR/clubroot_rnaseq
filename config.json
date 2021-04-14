@@ -29,6 +29,8 @@
 		"volcanoplots": "data/figures/volcanoplots",
 		"kallisto_idx": "data/references/kallisto.idx",
 		"kallisto_quant": "data/datasets/kallisto",
+		"STAR_ref": "data/references/STAR_ref",
+		"STAR_align": "data/datasets/STAR_align",
 		"bedgraph": "data/datasets/bedgraph"
 	},
 	"download":
@@ -56,12 +58,12 @@
 			"LA.C.7.1": "https://sra-download.ncbi.nlm.nih.gov/traces/sra11/SRR/010618/SRR10873084",
 			"LA.C.7.2": "https://sra-download.ncbi.nlm.nih.gov/traces/sra7/SRR/010618/SRR10873083",
 			"LA.C.7.3": "https://sra-download.ncbi.nlm.nih.gov/traces/sra41/SRR/010618/SRR10873072",
-			"LA.C.21.1": "https://sra-download.ncbi.nlm.nih.gov/traces/sra78/SRR/010618/SRR10873052",
-			"LA.C.21.2": "https://sra-download.ncbi.nlm.nih.gov/traces/sra36/SRR/010618/SRR10873051",
-			"LA.C.21.3": "https://sra-download.ncbi.nlm.nih.gov/traces/sra57/SRR/010618/SRR10873050",
 			"LA.C.14.1": "https://sra-download.ncbi.nlm.nih.gov/traces/sra2/SRR/010618/SRR10873061",
 			"LA.C.14.2": "https://sra-download.ncbi.nlm.nih.gov/traces/sra40/SRR/010618/SRR10873054",
 			"LA.C.14.3": "https://sra-download.ncbi.nlm.nih.gov/traces/sra37/SRR/010618/SRR10873053",
+			"LA.C.21.1": "https://sra-download.ncbi.nlm.nih.gov/traces/sra78/SRR/010618/SRR10873052",
+			"LA.C.21.2": "https://sra-download.ncbi.nlm.nih.gov/traces/sra36/SRR/010618/SRR10873051",
+			"LA.C.21.3": "https://sra-download.ncbi.nlm.nih.gov/traces/sra57/SRR/010618/SRR10873050",
 			"LA.I.7.1": "https://sra-download.ncbi.nlm.nih.gov/traces/sra0/SRR/010618/SRR10873049",
 			"LA.I.7.2": "https://sra-download.ncbi.nlm.nih.gov/traces/sra12/SRR/010618/SRR10873082",
 			"LA.I.7.3": "https://sra-download.ncbi.nlm.nih.gov/traces/sra74/SRR/010618/SRR10873081",
@@ -72,8 +74,8 @@
 			"LA.I.21.2": "https://sra-download.ncbi.nlm.nih.gov/traces/sra12/SRR/010618/SRR10873076",
 			"LA.I.21.3": "https://sra-download.ncbi.nlm.nih.gov/traces/sra68/SRR/010618/SRR10873075"
 		},
-		"gtf_plasmodiophora_brassicae": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/gtf/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.48.gtf.gz",
-		"genome_plasmodiophora_brassicae": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/fasta/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/dna/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.dna.toplevel.fa.gz",
+		"gtf_plasmodiophora_brassicae": "ftp://ftp.ensemblgenomes.org/pub/protists/release-49/gtf/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.49.gtf.gz",
+		"genome_plasmodiophora_brassicae": "ftp://ftp.ensemblgenomes.org/pub/protists/release-49/fasta/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/dna/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.dna.toplevel.fa.gz",
 		"gtf_brassica_napus": "ftp://ftp.ensemblgenomes.org/pub/plants/release-49/gtf/brassica_napus/Brassica_napus.AST_PRJEB5043_v1.49.gtf.gz",
 		"genome_brassica_napus": "ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/brassica_napus/dna/Brassica_napus.AST_PRJEB5043_v1.dna.toplevel.fa.gz"
 	},
