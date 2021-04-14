@@ -34,12 +34,12 @@
   },
   "STAR_index":
   {
-    "time": "0-05:00:00"
+    "time": "0-05:00:00",
     "cpus-per-task": "16"
   },
   "STAR_align":
   {
-    "time": "0-05:00:00"
+    "time": "0-05:00:00",
     "cpus-per-task": "16"
   }
 }
