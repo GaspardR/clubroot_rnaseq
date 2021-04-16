@@ -230,8 +230,7 @@ rule STAR_align:
 
 rule bedgraph:
     input:
-        bam = rules.STAR_align.output.bam,
-        genome = config["path"]["chrNameLength"]
+        bam = rules.STAR_align.output.bam
     output:
         Path(
             config["path"]["bedgraph"],
@@ -242,6 +241,4 @@ rule bedgraph:
     conda:
         "../envs/bedtools.yaml"
     shell:
-        "samtools sort {input.bam}"
-        " | bedtools genomecov {params.p} - -g {input.genome}"
-        " > {output}"
+        "bedtools genomecov {params.p} {input.bam} > {output}"
