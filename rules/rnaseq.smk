@@ -243,5 +243,5 @@ rule bedgraph:
         "../envs/bedtools.yaml"
     shell:
         "samtools sort {input.bam}"
-        " | bedtools genomecov {params.p} stdin -g {input.genome}"
+        " | bedtools genomecov {params.p} - -g {input.genome}"
         " > {output}"
