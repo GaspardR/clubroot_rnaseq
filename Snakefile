@@ -32,11 +32,16 @@ def get_fastqc(config):
 rule all:
 	input:
 		expression_profile = (config['path']['expressionprofil_plots']),
+		heatmap_dir = config['path']['heatmap_dir'],
 		
-		heatmap_dir = directory(
-			config['path']['heatmap_dir']
-        ),
-		
+		dds_execute = expand(
+				os.path.join(
+            	config['path']['DESeq2_dds_execute_dir'],
+            	'dds_execute_condition_{condition_dai}.dds'
+        	),
+			condition_dai = condition_dai,
+		),
+
 		#volcanoplot = expand(
 		#		os.path.join(
         #    	config['path']['volcano_plots'],

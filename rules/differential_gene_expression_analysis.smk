@@ -7,7 +7,6 @@
 
 rule DESeq2_init:
     input:
-        #combined = rules.combine_gene_quantification.output.combined
         combined = 'data/all.csv'
     output:
         DESeq2_dds_init_dir = directory(config['path']['DESeq2_dds_init_dir']),
@@ -57,6 +56,15 @@ rule DESeq2_execute:
             config['path']['DESeq2_dds_execute_dir'],
             'dds_execute_condition_{condition_dai}.dds'
         ),
+        DESeq2_size_factor_normalization = os.path.join(
+            config['path']['DESeq2_size_factor_normalization'],
+            'size_factor_normalization_count_{condition_dai}.csv'
+        ),
+        DESeq2_vst_normalization = os.path.join(
+            config['path']['DESeq2_vst_normalization'],
+            'vst_normalization_count_{condition_dai}.csv'
+        ),
+
     params:
         condition = '{condition_dai}'
     threads:
@@ -66,12 +74,12 @@ rule DESeq2_execute:
     script:
         '../modules/R_scripts/DESeq2_execute.R'
 
-condition_dai = [
-    'all',
-    '7',
-    '14',
-    '21'
-]
+#condition_dai = [
+#    'all',
+#    '7',
+#    '14',
+#    '21'
+#]
 
 rule DESeq2_get_results:
     input:
@@ -81,6 +89,7 @@ rule DESeq2_get_results:
             config['path']['DESeq2_results'],
             'results_condition_{condition_dai}.csv'
         ),
+
     threads:
         1
     params:
@@ -142,11 +151,15 @@ rule DESeq2_get_results_dai:
 
 rule generate_expression_profile:
     input:
-        sizefactor_normalized_count = 'data/DESeq2/DESeq2_sizefactor_normalized_count.csv',
+        #sizefactor_normalized_count = 'data/DESeq2/DESeq2_sizefactor_normalized_count.csv',
         sample_information = rules.DESeq2_init.output.sample_information,
         results_dai_7vs14 = rules.DESeq2_get_results_dai.output.results_dai_7vs14,
         results_dai_7vs21 = rules.DESeq2_get_results_dai.output.results_dai_7vs21,
         results_dai_14vs21 = rules.DESeq2_get_results_dai.output.results_dai_14vs21,
+        sizefactor_normalized_count = os.path.join(
+            config['path']['DESeq2_size_factor_normalization'],
+            'size_factor_normalization_count_all.csv'
+        ),
     output:
         expression_profile = directory(
             config['path']['expressionprofil_plots']
@@ -159,7 +172,11 @@ rule generate_expression_profile:
 rule generate_heatmap:
     input:
         generate_expression_dir = rules.generate_expression_profile.output.expression_profile,
-        vst_normalized_count = 'data/DESeq2/DESeq2_vst_normalized_count.csv',
+        #vst_normalized_count = 'data/DESeq2/DESeq2_vst_normalized_count.csv',
+        vst_normalized_count = os.path.join(
+            config['path']['DESeq2_vst_normalization'],
+            'vst_normalization_count_all.csv'
+        ),
     output:
         heatmap_dir = directory(
             config['path']['heatmap_dir']
