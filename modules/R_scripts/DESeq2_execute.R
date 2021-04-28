@@ -59,8 +59,6 @@ dds2 <- deseq2_analysis(
 )
 
 
-
-
 ## extract expression count and rlog normalized counts
 if (snakemake@params[['condition']] == 'all') {
 

@@ -74,13 +74,6 @@ rule DESeq2_execute:
     script:
         '../modules/R_scripts/DESeq2_execute.R'
 
-#condition_dai = [
-#    'all',
-#    '7',
-#    '14',
-#    '21'
-#]
-
 rule DESeq2_get_results:
     input:
         dds_execute = rules.DESeq2_execute.output.dds_execute
@@ -151,7 +144,6 @@ rule DESeq2_get_results_dai:
 
 rule generate_expression_profile:
     input:
-        #sizefactor_normalized_count = 'data/DESeq2/DESeq2_sizefactor_normalized_count.csv',
         sample_information = rules.DESeq2_init.output.sample_information,
         results_dai_7vs14 = rules.DESeq2_get_results_dai.output.results_dai_7vs14,
         results_dai_7vs21 = rules.DESeq2_get_results_dai.output.results_dai_7vs21,
@@ -172,7 +164,6 @@ rule generate_expression_profile:
 rule generate_heatmap:
     input:
         generate_expression_dir = rules.generate_expression_profile.output.expression_profile,
-        #vst_normalized_count = 'data/DESeq2/DESeq2_vst_normalized_count.csv',
         vst_normalized_count = os.path.join(
             config['path']['DESeq2_vst_normalization'],
             'vst_normalization_count_all.csv'

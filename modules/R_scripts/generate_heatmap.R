@@ -330,6 +330,7 @@ create_heatmap <- function(
     print(heatmap)
     dev.off()    
 
+    return(heatmap)
 }
 
 #################################################
@@ -340,7 +341,7 @@ create_heatmap <- function(
 dir.create(snakemake@output[['heatmap_dir']])
 
 ## heatmap using all the genes (P brassicae and B napus)
-create_heatmap(
+heatmap_all <- create_heatmap(
     normalized_count_all,
     width = 6,
     height = 8,
@@ -354,38 +355,81 @@ create_heatmap(
 
 )
 
-## heatmap using only canola genes
-create_heatmap(
-    normalized_count_canola,
-    width = 6,
-    height = 8,
-    column_split = 3,
-    row_split = 3,
-    row_annotation = F,
-    figure_path = paste(
-        snakemake@output[['heatmap_dir']],
-        '/heatmap_canola.svg',
-        sep = ''
-    )
-)
+### heatmap using only canola genes
+#create_heatmap(
+#    normalized_count_canola,
+#    width = 6,
+#    height = 8,
+#    column_split = 3,
+#    row_split = 3,
+#    row_annotation = F,
+#    figure_path = paste(
+#        snakemake@output[['heatmap_dir']],
+#        '/heatmap_canola.svg',
+#        sep = ''
+#    )
+#)
 
-## heatnap using only P brassicae genes
-create_heatmap(
-    normalized_count_clubroot,
-    width = 6,
-    height = 8,
-    column_split = 3,
-    row_split = 2,
-    row_annotation = F,
-    figure_path = paste(
-        snakemake@output[['heatmap_dir']],
-        '/heatmap_clubroot.svg',
-        sep = ''
-    )
-
-)
+### heatnap using only P brassicae genes
+#create_heatmap(
+#    normalized_count_clubroot,
+#    width = 6,
+#    height = 8,
+#    column_split = 3,
+#    row_split = 2,
+#    row_annotation = F,
+#    figure_path = paste(
+#        snakemake@output[['heatmap_dir']],
+#        '/heatmap_clubroot.svg',
+#        sep = ''
+#    )
+#)
 
 
 #################################################
-## END
+## Extract the genes associated with each cluster generated in the heatmap
 #################################################
+
+## extract the position of the genes associated with the clustering
+cluster_samples_list <- row_order(heatmap_all)
+
+## extract the gene name for each gene position
+cluster_list <- lapply(
+    cluster_samples_list,
+    function(x) unlist(normalized_count_all[, gene_name])[x]
+)
+
+## create the data table that will contain all the cluster information for each genes
+gene_cluster_dt <- data.table(
+    gene_name = unlist(normalized_count_all[, gene_name])
+)
+
+## for each cluster, put the name of the cluster into the table 
+for (i_cluster in seq(1, length(cluster_list), 1)) {
+
+    ## extract the samples associated with the cluster of interest
+    cluster_sample_vector <- cluster_list[[i_cluster]]
+
+    ## create the name of the cluster
+    cluster_name <- paste(
+        'cluster_',
+        i_cluster,
+        sep = ','
+    )
+
+    ## put the cluster name into the data table gene_cluster_dt
+    gene_cluster_dt[gene_name %in% cluster_sample_vector, cluster_name := cluster_name]
+
+}
+
+## write the data table that contain the gene cluster information
+fwrite(
+    gene_cluster_dt,
+    paste(
+       snakemake@output[['heatmap_dir']],
+        '/gene_cluster_all',
+        sep = ''
+    ),
+    sep = ','
+)
+
