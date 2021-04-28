@@ -31,15 +31,21 @@ def get_fastqc(config):
 
 rule all:
 	input:
-		volcanoplot = expand(
-				os.path.join(
-            	config['path']['volcano_plots'],
-            	'volcanoplot_condition_{condition_dai}.png'
-        	),
-			condition_dai = condition_dai
-		),
-
 		expression_profile = (config['path']['expressionprofil_plots']),
+		
+		heatmap_dir = directory(
+			config['path']['heatmap_dir']
+        ),
+		
+		#volcanoplot = expand(
+		#		os.path.join(
+        #    	config['path']['volcano_plots'],
+        #    	'volcanoplot_condition_{condition_dai}.png'
+        #	),
+		#	condition_dai = condition_dai
+		#),
+
+
 
 		#fastqc = get_fastqc(config),
 		#quant = expand(

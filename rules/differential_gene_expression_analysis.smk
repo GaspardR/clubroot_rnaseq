@@ -10,7 +10,7 @@ rule DESeq2_init:
         #combined = rules.combine_gene_quantification.output.combined
         combined = 'data/all.csv'
     output:
-        #DESeq2_dds_init_dir = directory(config['path']['DESeq2_dds_init_dir']),
+        DESeq2_dds_init_dir = directory(config['path']['DESeq2_dds_init_dir']),
         sample_information = config['path']['DESeq2_sample_information'],
         dds_init_condition_all = os.path.join(
             config['path']['DESeq2_dds_init_dir'],
@@ -57,6 +57,8 @@ rule DESeq2_execute:
             config['path']['DESeq2_dds_execute_dir'],
             'dds_execute_condition_{condition_dai}.dds'
         ),
+    params:
+        condition = '{condition_dai}'
     threads:
         1
     conda:
@@ -114,36 +116,33 @@ rule DESeq2_get_results_dai:
     script:
         '../modules/R_scripts/DESeq2_get_results_dai.R'
 
-condition_dai = [
-    'all',
-    '7',
-    '14',
-    '21',
-    'all_infected_7vs14',
-    'all_infected_7vs21',
-    'all_infected_14vs21'
-]
+#condition_dai2 = [
+#    'all',
+#    '7',
+#    '14',
+#    '21',
+#    'all_infected_7vs14',
+#    'all_infected_7vs21',
+#    'all_infected_14vs21'
+#]
 
-rule generate_volcanoplot:
-    input:
-        results = rules.DESeq2_get_results.output.results
-    output:
-        volcanoplot = os.path.join(
-            config['path']['volcano_plots'],
-            'volcanoplot_condition_{condition_dai}.png'
-        ),
-    conda:
-        "../envs/DESeq2.yaml"
-    script:
-        '../modules/R_scripts/generate_volcanoplot.R'
+#rule generate_volcanoplot:
+#    input:
+#        results = rules.DESeq2_get_results.output.results
+#    output:
+#        volcanoplot = os.path.join(
+#            config['path']['volcano_plots'],
+#            'volcanoplot_condition_{condition_dai2}.png'
+#        ),
+#    conda:
+#        "../envs/DESeq2.yaml"
+#    script:
+#        '../modules/R_scripts/generate_volcanoplot.R'
 
 
 rule generate_expression_profile:
     input:
-        dds_all = os.path.join(
-            config['path']['DESeq2_dds_execute_dir'],
-            'dds_execute_condition_all.dds'
-        ),
+        sizefactor_normalized_count = 'data/DESeq2/DESeq2_sizefactor_normalized_count.csv',
         sample_information = rules.DESeq2_init.output.sample_information,
         results_dai_7vs14 = rules.DESeq2_get_results_dai.output.results_dai_7vs14,
         results_dai_7vs21 = rules.DESeq2_get_results_dai.output.results_dai_7vs21,
@@ -151,8 +150,22 @@ rule generate_expression_profile:
     output:
         expression_profile = directory(
             config['path']['expressionprofil_plots']
-        )
+        ),
     conda:
         "../envs/DESeq2.yaml"
     script:
         '../modules/R_scripts/generate_expression_profile.R'
+
+rule generate_heatmap:
+    input:
+        generate_expression_dir = rules.generate_expression_profile.output.expression_profile,
+        vst_normalized_count = 'data/DESeq2/DESeq2_vst_normalized_count.csv',
+    output:
+        heatmap_dir = directory(
+            config['path']['heatmap_dir']
+        ),
+    conda:
+        "../envs/heatmap.yaml"
+    script:
+        '../modules/R_scripts/generate_heatmap.R'
+

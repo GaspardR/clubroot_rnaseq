@@ -21,13 +21,13 @@ sample_information <- fread(
     sep = ","
 )
 
-## load the dds
-dds_all <- readRDS(
-    snakemake@input[['dds_all']]
-)
+## transform the control sample to a dai equal to 0
+sample_information[condition == 'C', dai := 0]
 
-## extract expression count
-normalized_count <- as.data.table(counts(dds_all, normalized = T), keep.rownames = 'gene_name')
+## load the size factor normalized count
+normalized_count <- fread(
+    input = snakemake@input[['sizefactor_normalized_count']]
+)
 
 ## load the deseq results for dai comparisons
 results_dai_7vs14 <- fread(
@@ -44,7 +44,6 @@ results_dai_14vs21 <- fread(
     snakemake@input[["results_dai_14vs21"]],
     sep = ','
 )
-
 
 #################################################
 ## Functions
@@ -76,7 +75,7 @@ extract_DEgenes <- function(
 ## Extract genes
 #################################################
 
-padj_cutoff <- 0.001
+padj_cutoff <- 0.05
 fc_cutoff <- 2
 
 ## Extract the DEgenes
@@ -130,6 +129,11 @@ specie_distribution[
     ),
     specie_name := 'clubroot'
 ]
+
+canola_genes <- specie_distribution[specie_name == 'canola', gene_name]
+canola_genes <- paste(canola_genes, collapse = ' ')
+clubroot_genes <- specie_distribution[specie_name == 'clubroot', gene_name]
+clubroot_genes <- paste(clubroot_genes, collapse = ' ')
 
 ## retreive the distribution information of canola and clubroot genes
 gene_distribution <- as.data.table(table(specie_distribution[,specie_name]))[, setnames(.SD, 'V1', 'specie')]
@@ -235,9 +239,6 @@ generate_expressionprofile <- function(
     )
 }
 
-
-
-
 #################################################
 ## Generate figures
 #################################################
@@ -246,6 +247,42 @@ generate_expressionprofile <- function(
 dir.create(
     snakemake@output[["expression_profile"]]
 )
+
+## write the differential expressed genes into file
+file_name <- paste(
+    snakemake@output[["expression_profile"]],
+    '/DEgenes_canola_',
+    'pvalcutoff',
+    padj_cutoff,
+    '_cfcutoff',
+    fc_cutoff,
+    '.txt',
+    sep = ''
+)
+
+cat(
+    unlist(specie_distribution[specie_name == 'canola', gene_name]),
+    file = file_name,
+    sep = "\n"
+)
+
+file_name <- paste(
+    snakemake@output[["expression_profile"]],
+    '/DEgenes_clubroot_',
+    'pvalcutoff',
+    padj_cutoff,
+    '_cfcutoff',
+    fc_cutoff,
+    '.txt',
+    sep = ''
+)
+
+cat(
+    unlist(specie_distribution[specie_name == 'clubroot', gene_name]),
+    file = file_name,
+    sep = "\n"
+)
+
 
 #####
 ## Generate figures that describes the gene distribution amongst species
@@ -296,6 +333,7 @@ ggsave(
 
 ## extract and formate data
 data_canola <- formate_expression_profil(specie_input = 'canola')
+
 data_clubroot_full <- formate_expression_profil(specie_input = 'clubroot')
 data_clubroot_filtered <- formate_expression_profil(specie_input = 'clubroot')[variable != 'ENSRNAG00050137108'][variable != 'ENSRNAG00050137230']
 

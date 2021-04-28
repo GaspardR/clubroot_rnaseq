@@ -59,6 +59,35 @@ dds2 <- deseq2_analysis(
 )
 
 
+
+
+## extract expression count and rlog normalized counts
+if (snakemake@params[['condition']] == 'all') {
+
+    ## expression count
+    normalized_count <- as.data.table(counts(dds2, normalized = T), keep.rownames = 'gene_name')
+
+    fwrite(
+        normalized_count,
+        'data/DESeq2/DESeq2_sizefactor_normalized_count.csv',
+        sep = ','
+    )
+
+    ## rlog expression count
+    #vst_normalized_count <- as.data.table(vst(DESeq2_dds), keep.rownames = 'gene_name')
+    vst_normalized_count <- as.data.table((assay(vst(DESeq2_dds))), keep.rownames = 'gene_name')
+
+    print(vst_normalized_count)
+    print(class(vst_normalized_count))
+    print('ok')
+    fwrite(
+        vst_normalized_count,
+        'data/DESeq2/DESeq2_vst_normalized_count.csv',
+        sep = ','
+    )
+}
+
+
 ## create the directory that contain the dds_excute output
 #dir.create(snakemake@output[["DESeq2_dds_execute"]])
 

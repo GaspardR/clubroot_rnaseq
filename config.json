@@ -27,6 +27,7 @@
 		"DESeq2_results": "data/DESeq2/DESeq2_results",
 		"volcano_plots": "data/figures/volcano_plots",
 		"expressionprofil_plots" : "data/figures/expressionprofil_plots",
+		"heatmap_dir" : "data/figures/heatmap",
 		"kallisto_idx": "data/references/kallisto.idx",
 		"kallisto_quant": "data/datasets/kallisto"
 	},

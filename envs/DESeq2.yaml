@@ -10,4 +10,4 @@ dependencies:
   - bioconductor-deseq2=1.26.0
   - libopenblas=0.3.10
   - bioconductor-enhancedvolcano=1.4.0
-  - r-svglite 
+  - r-svglite=1.2.3.2
