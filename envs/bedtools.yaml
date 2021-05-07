@@ -1,0 +1,5 @@
+channels:
+  - defaults
+  - bioconda
+dependencies:
+  - bedtools==1.9

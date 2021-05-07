@@ -391,11 +391,11 @@ heatmap_all <- create_heatmap(
 #################################################
 
 ## extract the position of the genes associated with the clustering
-cluster_samples_list <- row_order(heatmap_all)
+cluster_gene_list <- row_order(heatmap_all)
 
 ## extract the gene name for each gene position
 cluster_list <- lapply(
-    cluster_samples_list,
+    cluster_gene_list,
     function(x) unlist(normalized_count_all[, gene_name])[x]
 )
 
@@ -407,20 +407,40 @@ gene_cluster_dt <- data.table(
 ## for each cluster, put the name of the cluster into the table 
 for (i_cluster in seq(1, length(cluster_list), 1)) {
 
-    ## extract the samples associated with the cluster of interest
-    cluster_sample_vector <- cluster_list[[i_cluster]]
+    ## extract the genes associated with the cluster of interest
+    cluster_gene_vector <- cluster_list[[i_cluster]]
 
     ## create the name of the cluster
-    cluster_name <- paste(
+    cluster_name2 <- paste(
         'cluster_',
         i_cluster,
-        sep = ','
+        sep = ''
     )
 
     ## put the cluster name into the data table gene_cluster_dt
-    gene_cluster_dt[gene_name %in% cluster_sample_vector, cluster_name := cluster_name]
-
+    gene_cluster_dt[gene_name %in% cluster_gene_vector, cluster_name := cluster_name2]
 }
+
+## put the species for each genes
+canola_id_prefix_regex <- 'ENSRNA|GSBRNA2T'
+clubroot_id_prefix_regex <- 'ENSRNAG|PBRA'
+
+## add the gene type for each gene
+gene_cluster_dt[
+    grep(
+        x = gene_name,
+        pattern = canola_id_prefix_regex
+    ),
+    specie := 'canola'
+]  
+
+gene_cluster_dt[
+    grep(
+        x = gene_name,
+        pattern = clubroot_id_prefix_regex
+    ),
+    specie := 'clubroot'
+]
 
 ## write the data table that contain the gene cluster information
 fwrite(

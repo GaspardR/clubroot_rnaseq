@@ -14,6 +14,7 @@ wildcard_constraints:
 include: "rules/downloads.smk"
 include: "rules/rnaseq.smk"
 include: "rules/differential_gene_expression_analysis.smk"
+include: "rules/orthology_analysis.smk"
 
 
 __author__ = ["Gaspard Reulet", "Hoang-Dong Nguyen"]
@@ -33,7 +34,8 @@ rule all:
 	input:
 		expression_profile = (config['path']['expressionprofil_plots']),
 		heatmap_dir = config['path']['heatmap_dir'],
-		
+        bed_file = config["path"]["bedfile"]
+
 		#dds_execute = expand(
 		#		os.path.join(
         #    	config['path']['DESeq2_dds_execute_dir'],

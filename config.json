@@ -30,6 +30,7 @@
 		"volcano_plots": "data/figures/volcano_plots",
 		"expressionprofil_plots" : "data/figures/expressionprofil_plots",
 		"heatmap_dir" : "data/figures/heatmap",
+		"bedfile" : "data/bed_file.bed",
 		"kallisto_idx": "data/references/kallisto.idx",
 		"kallisto_quant": "data/datasets/kallisto"
 	},
