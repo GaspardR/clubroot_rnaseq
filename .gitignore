@@ -5,6 +5,7 @@ __pycache__/
 
 # directories
 data/*
+*.pdf
 
 # C extensions
 *.so

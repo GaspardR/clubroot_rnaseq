@@ -93,7 +93,7 @@ for (i_gene in seq(1, length(clubroot_gene_vector), 1)) {
 
 fwrite(
     gene_information,
-    snakemake@output[['bed_file']],
+    snakemake@output[['p_brassicae_bed_file']],
     sep = '\t',
     col.names = F
 )
