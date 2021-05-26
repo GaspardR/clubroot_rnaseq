@@ -1,0 +1,9 @@
+channels:
+  - defaults
+  - bioconda
+  - conda-forge
+dependencies:
+  - r-data.table
+  - r-tidyverse
+  - r-svglite
+  - bioconductor-topgo

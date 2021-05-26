@@ -34,8 +34,9 @@ rule all:
 	input:
 		expression_profile = (config['path']['expressionprofil_plots']),
 		heatmap_dir = config['path']['heatmap_dir'],
-        p_brassicae_sequences = config["path"]["p_brassicae_sequences"]
-
+        p_brassicae_sequences = config["path"]["p_brassicae_sequences"],
+		enrichment_results = config["path"]["enrichment_results"]
+		
 		#dds_execute = expand(
 		#		os.path.join(
         #    	config['path']['DESeq2_dds_execute_dir'],

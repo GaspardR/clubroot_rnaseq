@@ -12,6 +12,7 @@
 		"genome_plasmodiophora_brassicae": "data/references/genome_plasmodiophora_brassicae.fa",
 		"gtf_brassica_napus": "data/references/annotation_brassica_napus.gtf",
 		"genome_brassica_napus": "data/references/genome_brassica_napus.fa",
+		"goa_plasmodiophora_brassicae" : "data/references/goa_plasmodiophora_brassicae.goa",
 		"transcriptome": "data/references/transcriptome.fa",
 		"merged_genome": "data/references/merged_genome.fa",
 		"merged_annotation": "data/references/merged_annotation.gtf",
@@ -33,7 +34,10 @@
 		"p_brassicae_bed_file" : "data/orthology_analysis/p_brassicae_bed_file.bed",
 		"p_brassicae_sequences" : "data/orthology_analysis/p_brassicae_sequences.tsv",
 		"kallisto_idx": "data/references/kallisto.idx",
-		"kallisto_quant": "data/datasets/kallisto"
+		"kallisto_quant": "data/datasets/kallisto",
+		"go_id": "data/enrichment_analysis/go_id.tsv",
+		"enrichment_results" : "data/enrichment_analysis/results.csv"
+		
 	},
 	"download":
 	{
@@ -79,7 +83,8 @@
 		"gtf_plasmodiophora_brassicae": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/gtf/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.48.gtf.gz",
 		"genome_plasmodiophora_brassicae": "ftp://ftp.ensemblgenomes.org/pub/protists/release-48/fasta/protists_rhizaria1_collection/plasmodiophora_brassicae_gca_001049375/dna/Plasmodiophora_brassicae_gca_001049375.pbe3.h15.dna.toplevel.fa.gz",
 		"gtf_brassica_napus": "ftp://ftp.ensemblgenomes.org/pub/plants/release-49/gtf/brassica_napus/Brassica_napus.AST_PRJEB5043_v1.49.gtf.gz",
-		"genome_brassica_napus": "ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/brassica_napus/dna/Brassica_napus.AST_PRJEB5043_v1.dna.toplevel.fa.gz"
+		"genome_brassica_napus": "ftp://ftp.ensemblgenomes.org/pub/plants/release-49/fasta/brassica_napus/dna/Brassica_napus.AST_PRJEB5043_v1.dna.toplevel.fa.gz",
+		"goa_plasmodiophora_brassicae": "http://ftp.ebi.ac.uk/pub/databases/GO/goa/proteomes/1339671.P_brassicae_Clubroot_disease.goa"
 	},
 	"params":
 	{

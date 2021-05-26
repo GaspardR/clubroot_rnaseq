@@ -97,3 +97,12 @@ rule transcriptID2geneName:
 		"../envs/pypackages.yaml"
 	script:
 		"../modules/python_scripts/transcriptID2geneName.py"
+
+
+rule download_goa_plasmodiophora_brassicae:
+	output:
+		goa_plasmodiophora_brassicae = config["path"]["goa_plasmodiophora_brassicae"],
+	params:
+		link = config["download"]["goa_plasmodiophora_brassicae"]
+	shell:
+		"wget --quiet -O {output.goa_plasmodiophora_brassicae} {params.link}"
