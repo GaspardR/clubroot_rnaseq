@@ -97,5 +97,3 @@ fwrite(
     sep = '\t',
     col.names = F
 )
-
-Sys.sleep(10000)

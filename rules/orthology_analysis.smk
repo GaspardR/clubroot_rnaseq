@@ -19,11 +19,13 @@ rule extract_sequence_from_bed:
         bed_file = rules.create_bed_file.output.bed_file,
         genome_plasmodiophora_brassicae = config["path"]["genome_plasmodiophora_brassicae"]
     output:
-        test = "data/sequences.fa"
+        clubroot_gene_sequences = "data/clubroot_gene_sequences.tsv"
     conda:
         "../envs/bedtools.yaml"
     shell:
         "bedtools getfasta "
         "-fi {input.genome_plasmodiophora_brassicae} "
         "-bed {input.bed_file} "
-        "-name"
+        "-name "
+        "-tab "
+        "-fo {output.clubroot_gene_sequences}"

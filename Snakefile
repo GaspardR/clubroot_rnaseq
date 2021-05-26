@@ -34,7 +34,7 @@ rule all:
 	input:
 		expression_profile = (config['path']['expressionprofil_plots']),
 		heatmap_dir = config['path']['heatmap_dir'],
-        bed_file = config["path"]["bedfile"]
+        test = "data/clubroot_gene_sequences.tsv"
 
 		#dds_execute = expand(
 		#		os.path.join(
